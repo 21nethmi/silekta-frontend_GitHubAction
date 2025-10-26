@@ -16,9 +16,20 @@ interface InventoryItem {
 const InventoryPage = () => {
   const [activeTab, setActiveTab] = useState<'printing' | 'production'>('printing');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    stock: 0,
+    supplierName: '',
+    unitPrice: 0,
+    category: 'printing' as 'printing' | 'production',
+  });
 
-  // Dummy data for inventory items
-  const inventoryData: InventoryItem[] = [
+  // Dummy data for inventory items - converted to state
+  const [inventoryData, setInventoryData] = useState<InventoryItem[]>([
     // Printing materials
     {
       id: 'P001',
@@ -93,7 +104,7 @@ const InventoryPage = () => {
       category: 'production',
       lastUpdated: '2024-01-12'
     }
-  ];
+  ]);
 
   const filteredData = inventoryData.filter(item => {
     const matchesCategory = item.category === activeTab;
@@ -101,6 +112,78 @@ const InventoryPage = () => {
                          item.supplierName.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const handleAddClick = () => {
+    setFormData({ 
+      name: '', 
+      stock: 0, 
+      supplierName: '', 
+      unitPrice: 0,
+      category: activeTab 
+    });
+    setIsAddModalOpen(true);
+  };
+
+  const handleEditClick = (item: InventoryItem) => {
+    setSelectedItem(item);
+    setFormData({
+      name: item.name,
+      stock: item.stock,
+      supplierName: item.supplierName,
+      unitPrice: item.unitPrice,
+      category: item.category,
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleDeleteClick = (item: InventoryItem) => {
+    setSelectedItem(item);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleSave = () => {
+    if (isAddModalOpen) {
+      // Adding new item
+      const newItem: InventoryItem = {
+        id: `${formData.category === 'printing' ? 'P' : 'PR'}${String(inventoryData.length + 1).padStart(3, '0')}`,
+        name: formData.name,
+        stock: formData.stock,
+        supplierName: formData.supplierName,
+        unitPrice: formData.unitPrice,
+        category: formData.category,
+        lastUpdated: new Date().toISOString().split('T')[0]
+      };
+      setInventoryData([...inventoryData, newItem]);
+    } else if (isEditModalOpen && selectedItem) {
+      // Editing existing item
+      const updatedData = inventoryData.map(item =>
+        item.id === selectedItem.id
+          ? {
+              ...item,
+              name: formData.name,
+              stock: formData.stock,
+              supplierName: formData.supplierName,
+              unitPrice: formData.unitPrice,
+              lastUpdated: new Date().toISOString().split('T')[0]
+            }
+          : item
+      );
+      setInventoryData(updatedData);
+    }
+    
+    setIsAddModalOpen(false);
+    setIsEditModalOpen(false);
+    setFormData({ name: '', stock: 0, supplierName: '', unitPrice: 0, category: 'printing' });
+  };
+
+  const handleDeleteConfirm = () => {
+    if (selectedItem) {
+      const updatedData = inventoryData.filter(item => item.id !== selectedItem.id);
+      setInventoryData(updatedData);
+    }
+    setIsDeleteModalOpen(false);
+    setSelectedItem(null);
+  };
 
   const lowStockItems = inventoryData.filter(item => item.stock < 10);
   const recentlyRefilledItems = inventoryData.filter(item => 
@@ -153,8 +236,12 @@ const InventoryPage = () => {
             </div>
 
             {/* Create Button */}
-            <button className="bg-[#8CBCB9] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#8CBCB9]/90 transition-all duration-200 shadow-md">
-              Add New Inventory Item
+            <button 
+              onClick={handleAddClick}
+              className="bg-[#8CBCB9] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#8CBCB9]/90 transition-all duration-200 shadow-md flex items-center space-x-2"
+            >
+              <span className="text-xl">+</span>
+              <span>Add New Inventory Item</span>
             </button>
           </div>
 
@@ -168,7 +255,7 @@ const InventoryPage = () => {
                   placeholder="Search by name or supplier..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0B5351] focus:border-[#0B5351] transition-all duration-200 shadow-sm placeholder-gray-600"
+                  className="w-full px-4 py-3 text-base text-gray-900 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0B5351] focus:border-[#0B5351] transition-all duration-200 shadow-sm placeholder-gray-600"
                 />
                 {searchTerm && (
                   <button
@@ -265,14 +352,20 @@ const InventoryPage = () => {
                         {item.supplierName}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                        <span className="font-semibold">${item.unitPrice.toFixed(2)}</span>
+                        <span className="font-semibold">Rs {item.unitPrice.toFixed(2)}</span>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-center">
                         <div className="flex justify-center space-x-2">
-                          <button className="bg-[#0B5351] text-white px-3 py-1 rounded text-xs font-medium hover:bg-[#0B5351]/90 transition-colors">
+                          <button 
+                            onClick={() => handleEditClick(item)}
+                            className="bg-[#0B5351] text-white px-3 py-1 rounded text-xs font-medium hover:bg-[#0B5351]/90 transition-colors"
+                          >
                             Edit
                           </button>
-                          <button className="bg-red-500 text-white px-3 py-1 rounded text-xs font-medium hover:bg-red-600 transition-colors">
+                          <button 
+                            onClick={() => handleDeleteClick(item)}
+                            className="bg-red-500 text-white px-3 py-1 rounded text-xs font-medium hover:bg-red-600 transition-colors"
+                          >
                             Delete
                           </button>
                         </div>
@@ -305,6 +398,123 @@ const InventoryPage = () => {
           )}
         </div>
       </div>
+
+      {/* Add/Edit Modal */}
+      {(isAddModalOpen || isEditModalOpen) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              {isAddModalOpen ? 'Add New Item' : 'Edit Item'}
+            </h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0B5351] focus:border-transparent"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Stock</label>
+                <input
+                  type="number"
+                  value={formData.stock}
+                  onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0B5351] focus:border-transparent"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Supplier Name</label>
+                <input
+                  type="text"
+                  value={formData.supplierName}
+                  onChange={(e) => setFormData({ ...formData, supplierName: e.target.value })}
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0B5351] focus:border-transparent"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Unit Price</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={formData.unitPrice}
+                  onChange={(e) => setFormData({ ...formData, unitPrice: parseFloat(e.target.value) || 0 })}
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0B5351] focus:border-transparent"
+                />
+              </div>
+              
+              {isAddModalOpen && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value as 'printing' | 'production' })}
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0B5351] focus:border-transparent"
+                  >
+                    <option value="printing">Printing</option>
+                    <option value="production">Production</option>
+                  </select>
+                </div>
+              )}
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={handleSave}
+                className="flex-1 bg-[#8CBCB9] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#8CBCB9]/90 transition-colors"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => {
+                  setIsAddModalOpen(false);
+                  setIsEditModalOpen(false);
+                  setFormData({ name: '', stock: 0, supplierName: '', unitPrice: 0, category: 'printing' });
+                }}
+                className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Confirm Deletion</h2>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete <span className="font-semibold">{selectedItem?.name}</span>? This action cannot be undone.
+            </p>
+            
+            <div className="flex space-x-3">
+              <button
+                onClick={handleDeleteConfirm}
+                className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                  setSelectedItem(null);
+                }}
+                className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
