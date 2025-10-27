@@ -140,11 +140,16 @@ export default function ReturnsPage() {
     // Update orders array
     const updatedOrders = orders.map((o) => {
       if (o.id !== selectedOrder.id) return o;
-      const updatedProducts = o.products.map((p, idx) => {
-        const q = Math.max(0, Math.min(p.qty, returnQtys[idx] || 0));
-        return { ...p, qty: p.qty - q };
-      }).filter((p) => p.qty > 0);
-      const newTotal = updatedProducts.reduce((s, p) => s + p.qty * p.unitPrice, 0);
+      const updatedProducts = o.products
+        .map((p, idx) => {
+          const q = Math.max(0, Math.min(p.qty, returnQtys[idx] || 0));
+          return { ...p, qty: p.qty - q };
+        })
+        .filter((p) => p.qty > 0);
+      const newTotal = updatedProducts.reduce(
+        (s, p) => s + p.qty * p.unitPrice,
+        0
+      );
       return { ...o, products: updatedProducts, total: newTotal };
     });
 
@@ -185,11 +190,23 @@ export default function ReturnsPage() {
           <div className="max-w-[1200px] mx-auto flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Returns</h1>
-              <p className="text-sm text-gray-700">Register returned items and update orders</p>
+              <p className="text-sm text-gray-700">
+                Register returned items and update orders
+              </p>
             </div>
             <div className="flex items-center gap-3">
-              <Link href="/orders" className="px-3 py-2 bg-[#8CBCB9] text-white rounded-md text-sm hover:bg-[#78b7a9]">Back to Orders</Link>
-              <Link href="/orders/returns/history" className="px-3 py-2 border rounded-md text-sm text-gray-700 hover:bg-gray-50">History</Link>
+              <Link
+                href="/orders"
+                className="px-3 py-2 bg-[#8CBCB9] text-white rounded-md text-sm hover:bg-[#78b7a9]"
+              >
+                Back to Orders
+              </Link>
+              <Link
+                href="/orders/returns/history"
+                className="px-3 py-2 border rounded-md text-sm text-gray-700 hover:bg-gray-50"
+              >
+                History
+              </Link>
             </div>
           </div>
         </div>
@@ -207,7 +224,8 @@ export default function ReturnsPage() {
                   <option value="">-- choose order --</option>
                   {orders.map((o) => (
                     <option key={o.id} value={o.id}>
-                      {o.id} — {o.customerName} ({o.products.reduce((s, p) => s + p.qty, 0)} items)
+                      {o.id} — {o.customerName} (
+                      {o.products.reduce((s, p) => s + p.qty, 0)} items)
                     </option>
                   ))}
                 </select>
@@ -217,43 +235,65 @@ export default function ReturnsPage() {
                 <div>
                   {(() => {
                     // show customer info by id if available, otherwise try name-based lookup
-                    const cById = selectedOrder.customerId ? getCustomerById(selectedOrder.customerId) : null;
-                    const cByName = !cById ? getCustomerByName(selectedOrder.customerName) : null;
+                    const cById = selectedOrder.customerId
+                      ? getCustomerById(selectedOrder.customerId)
+                      : null;
+                    const cByName = !cById
+                      ? getCustomerByName(selectedOrder.customerName)
+                      : null;
                     const c = cById || cByName;
                     if (c) {
                       return (
                         <div className="mb-3">
                           <div className="font-medium">{c.name}</div>
-                          <div className="text-xs text-gray-700">{c.phone} • {c.email}</div>
+                          <div className="text-xs text-gray-700">
+                            {c.phone} • {c.email}
+                          </div>
                         </div>
                       );
                     }
                     return null;
                   })()}
-                  <div className="text-sm text-gray-700 mb-2">Products in order</div>
+                  <div className="text-sm text-gray-700 mb-2">
+                    Products in order
+                  </div>
                   <div className="space-y-2">
                     {selectedOrder.products.map((p, idx) => (
-                      <div key={idx} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded"
+                      >
                         <div className="flex-1">
                           <div className="font-medium">{p.name}</div>
-                          <div className="text-xs text-gray-700">{p.sku ?? ""} • {p.category === 'paper' ? 'Paper-based' : 'Printing'}</div>
+                          <div className="text-xs text-gray-700">
+                            {p.sku ?? ""} •{" "}
+                            {p.category === "paper"
+                              ? "Paper-based"
+                              : "Printing"}
+                          </div>
                         </div>
                         <div className="w-48 text-right">
-                          <div className="text-sm text-gray-700">Ordered: {p.qty}</div>
+                          <div className="text-sm text-gray-700">
+                            Ordered: {p.qty}
+                          </div>
                           <div className="flex items-center gap-2 mt-2 justify-end">
                             <input
                               type="number"
                               min={0}
                               max={p.qty}
                               value={returnQtys[idx] ?? 0}
-                              onChange={(e) => handleQtyChange(idx, Number(e.target.value))}
+                              onChange={(e) =>
+                                handleQtyChange(idx, Number(e.target.value))
+                              }
                               className="w-20 px-2 py-1 border rounded-md"
                             />
                           </div>
                           <input
                             placeholder="Reason (optional)"
                             value={reasons[idx] ?? ""}
-                            onChange={(e) => handleReasonChange(idx, e.target.value)}
+                            onChange={(e) =>
+                              handleReasonChange(idx, e.target.value)
+                            }
                             className="mt-2 w-full px-2 py-1 border rounded-md"
                           />
                         </div>
@@ -263,10 +303,16 @@ export default function ReturnsPage() {
 
                   <div className="mt-4 flex items-center justify-between">
                     <div className="text-sm text-gray-600">Refund amount</div>
-                    <div className="text-lg font-semibold">Rs {computeRefund().toFixed(2)}</div>
+                    <div className="text-lg font-semibold">
+                      Rs {computeRefund().toFixed(2)}
+                    </div>
                   </div>
 
-                  {message && <div className="mt-3 text-sm text-emerald-600">{message}</div>}
+                  {message && (
+                    <div className="mt-3 text-sm text-emerald-600">
+                      {message}
+                    </div>
+                  )}
 
                   <div className="mt-4 flex justify-end gap-3">
                     <button
@@ -289,7 +335,9 @@ export default function ReturnsPage() {
                   </div>
                 </div>
               ) : (
-                <div className="text-sm text-gray-500">Select an order to begin</div>
+                <div className="text-sm text-gray-500">
+                  Select an order to begin
+                </div>
               )}
             </div>
           </div>

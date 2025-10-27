@@ -6,11 +6,36 @@ export interface Customer {
 }
 
 const seededCustomers: Customer[] = [
-  { id: "CUST-1001", name: "Amal Perera", phone: "+94 77 123 4567", email: "amal@example.com" },
-  { id: "CUST-1002", name: "Nimal Fernando", phone: "+94 77 234 5678", email: "nimal@example.com" },
-  { id: "CUST-1003", name: "Samanthi Jayasuriya", phone: "+94 77 345 6789", email: "samanthi@example.com" },
-  { id: "CUST-1004", name: "Kamal Silva", phone: "+94 77 456 7890", email: "kamal@example.com" },
-  { id: "CUST-1005", name: "Dilani Perera", phone: "+94 77 567 8901", email: "dilani@example.com" },
+  {
+    id: "CUST-1001",
+    name: "Amal Perera",
+    phone: "+94 77 123 4567",
+    email: "amal@example.com",
+  },
+  {
+    id: "CUST-1002",
+    name: "Nimal Fernando",
+    phone: "+94 77 234 5678",
+    email: "nimal@example.com",
+  },
+  {
+    id: "CUST-1003",
+    name: "Samanthi Jayasuriya",
+    phone: "+94 77 345 6789",
+    email: "samanthi@example.com",
+  },
+  {
+    id: "CUST-1004",
+    name: "Kamal Silva",
+    phone: "+94 77 456 7890",
+    email: "kamal@example.com",
+  },
+  {
+    id: "CUST-1005",
+    name: "Dilani Perera",
+    phone: "+94 77 567 8901",
+    email: "dilani@example.com",
+  },
 ];
 
 // Simulate an async search - returns a promise that resolves after a short delay
@@ -19,8 +44,9 @@ export function searchCustomers(query: string): Promise<Customer[]> {
   return new Promise((resolve) => {
     setTimeout(() => {
       if (!q) return resolve(seededCustomers.slice(0, 50));
-      const results = seededCustomers.filter((c) =>
-        c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q)
+      const results = seededCustomers.filter(
+        (c) =>
+          c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q)
       );
       resolve(results);
     }, 180);
