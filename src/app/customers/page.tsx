@@ -24,6 +24,13 @@ const CustomersPage = () => {
     show: false,
     customerId: null,
   })
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const filteredCustomers = customers.filter((customer) =>
+    Object.values(customer).some((value) =>
+      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  )
 
   const handleAddCustomer = () => {
     setEditingCustomer(null)
@@ -88,7 +95,20 @@ const CustomersPage = () => {
               <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
               <p className="text-gray-600 mt-1">Manage your customer database</p>
             </div>
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-between items-center mt-4">
+              {/* Search Bar */}
+              <div className="relative w-64">
+                <input
+                  type="text"
+                  placeholder="Search customers..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all duration-200 text-gray-900"
+                />
+                <span className="absolute right-3 top-2.5 text-gray-400">🔍</span>
+              </div>
+
+              {/* Add Customer Button */}
               <button
                 onClick={handleAddCustomer}
                 className="bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600 transition-all duration-200 shadow-md flex items-center space-x-2"
@@ -99,7 +119,7 @@ const CustomersPage = () => {
             </div>
           </div>
 
-          {/* Customers Table */}
+          {/* Customers Table - Update to use filteredCustomers */}
           <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -126,7 +146,7 @@ const CustomersPage = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {customers.map((customer: Customer) => (
+                  {filteredCustomers.map((customer: Customer) => (
                     <tr key={customer.id} className="hover:bg-gray-50 transition-colors duration-200">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">{customer.name}</div>
@@ -178,16 +198,25 @@ const CustomersPage = () => {
             </div>
           </div>
 
-          {customers.length === 0 && (
+          {/* Update empty state to consider filtered results */}
+          {filteredCustomers.length === 0 && (
             <div className="text-center py-16">
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No customers found</h3>
-              <p className="text-gray-500 mb-6">Start by adding your first customer</p>
-              <button
-                onClick={handleAddCustomer}
-                className="bg-teal-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-teal-600 transition-colors"
-              >
-                Add Customer
-              </button>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                {searchQuery ? "No matching customers found" : "No customers found"}
+              </h3>
+              <p className="text-gray-500 mb-6">
+                {searchQuery
+                  ? "Try adjusting your search terms"
+                  : "Start by adding your first customer"}
+              </p>
+              {!searchQuery && (
+                <button
+                  onClick={handleAddCustomer}
+                  className="bg-teal-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-teal-600 transition-colors"
+                >
+                  Add Customer
+                </button>
+              )}
             </div>
           )}
         </div>
