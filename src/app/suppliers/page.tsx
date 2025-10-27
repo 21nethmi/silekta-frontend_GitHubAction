@@ -96,9 +96,9 @@ const SuppliersPage = () => {
       id: 'PO-00834',
       supplier: 'PaperCorp Ltd',
       material: 'Premium Paper Roll (A4)',
-      quantity: 45,
+      quantity: 50,
       unitPrice: 12.50,
-      totalCost: 562.50,
+      totalCost: 50 * 12.50,
       date: '2024-01-15',
       status: 'Delivered',
       category: 'printing'
@@ -107,9 +107,9 @@ const SuppliersPage = () => {
       id: 'PO-00835',
       supplier: 'PrintTech Solutions',
       material: 'Ink Cartridge - Black',
-      quantity: 8,
+      quantity: 20,
       unitPrice: 25.00,
-      totalCost: 200.00,
+      totalCost: 500.00,
       date: '2024-01-14',
       status: 'In Transit',
       category: 'printing'
@@ -129,9 +129,9 @@ const SuppliersPage = () => {
       id: 'PO-00837',
       supplier: 'PaperCorp Ltd',
       material: 'Cardstock Paper (Heavy)',
-      quantity: 3,
+      quantity: 10,
       unitPrice: 18.75,
-      totalCost: 56.25,
+      totalCost: 187.50,
       date: '2024-01-12',
       status: 'Pending',
       category: 'printing'
@@ -206,7 +206,7 @@ const SuppliersPage = () => {
               </div>
               <button 
                 onClick={() => setShowAddSupplier(true)}
-                className="bg-[#8CBCB9] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#8CBCB9]/90 transition-colors flex items-center justify-center space-x-2"
+                className="bg-[#0B5351] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#0B5351]/90 transition-colors flex items-center justify-center space-x-2"
               >
                 <span>+</span>
                 <span className="hidden sm:inline">Add Supplier</span>
@@ -214,7 +214,7 @@ const SuppliersPage = () => {
               </button>
               <button 
                 onClick={() => setShowNewPurchase(true)}
-                className="bg-[#8CBCB9] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#8CBCB9]/90 transition-colors flex items-center justify-center space-x-2"
+                className="bg-[#0B5351] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#0B5351]/90 transition-colors flex items-center justify-center space-x-2"
               >
                 <span>🛒</span>
                 <span className="hidden sm:inline">New Purchase</span>
