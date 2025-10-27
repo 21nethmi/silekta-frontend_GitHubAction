@@ -8,10 +8,9 @@ const geist = Geist({ subsets: ["latin"] })
 const geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
-}
+  title: "Silekta - Management Information System",
+  description: "Comprehensive business management system for inventory, suppliers, purchases, and more",
+};
 
 export default function RootLayout({
   children,
