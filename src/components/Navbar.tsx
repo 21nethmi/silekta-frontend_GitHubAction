@@ -14,7 +14,7 @@ const Navbar = () => {
 
   // Define navigation structure
   const navItems = [
-    { name: "Dashboard", href: "/" },
+    { name: "Dashboard", href: "/dashboard" },
     { name: "Customer Management", href: "/customers" },
     { name: "Order Management", href: "/orders" },
     { name: "Supplier & Purchase", href: "/suppliers" },
