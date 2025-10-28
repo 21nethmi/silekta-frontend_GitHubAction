@@ -469,13 +469,13 @@ const OrdersPage = () => {
                   onClick={() => {
                     setIsCreateOpen(true);
                   }}
-                  className="px-4 py-2 bg-[#32ca56] text-white rounded-md hover:bg-[#28b44c]"
+                  className="px-4 py-2 bg-[#197b70] text-white rounded-md hover:bg-[#28b44c]"
                 >
                   Create Order
                 </button>
                 <Link
                   href="/orders/returns"
-                  className="px-4 py-2 bg-[#e1d019] border border-gray-200 rounded-md text-sm text-white hover:bg-[#aac63a]"
+                  className="px-4 py-2 bg-[#bab042] border border-gray-200 rounded-md text-sm text-white hover:bg-[#aac63a]"
                 >
                   Returns
                 </Link>

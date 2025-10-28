@@ -1,38 +1,38 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 const Navbar = () => {
   const pathname = usePathname();
 
   // Track which dropdown is open
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   // Define navigation structure
   const navItems = [
-    { name: 'Dashboard', href: '/' },
-    { name: 'Customer Management', href: '/customers' },
-    { name: 'Order Management', href: '/orders' },
-    { name: 'Supplier & Purchase', href: '/suppliers' },
-    { name: 'Inventory Management', href: '/inventory' },
-    { name: 'Production Management', href: '/production' },
+    { name: "Dashboard", href: "/" },
+    { name: "Customer Management", href: "/customers" },
+    { name: "Order Management", href: "/orders" },
+    { name: "Supplier & Purchase", href: "/suppliers" },
+    { name: "Inventory Management", href: "/inventory" },
+    { name: "Production Management", href: "/production" },
     {
-      name: 'Employee Management',
+      name: "Employee Management",
       children: [
-        { name: 'Employee List', href: '/employee' },
-        { name: 'Payroll', href: '/payroll' },
+        { name: "Employee List", href: "/employee" },
+        { name: "Payroll", href: "/payroll" },
       ],
     },
-    { name: 'Billing & Invoice', href: '/billing' },
-    { name: 'Report & Analytics', href: '/reports' },
+    { name: "Billing & Invoice", href: "/billing" },
+    { name: "Report & Analytics", href: "/reports" },
   ];
 
   // Toggle dropdown open/close
-  const toggleDropdown = (name) => {
+  const toggleDropdown = (name: string) => {
     setOpenDropdown((prev) => (prev === name ? null : name));
   };
 
@@ -82,8 +82,8 @@ const Navbar = () => {
                             href={child.href}
                             className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
                               pathname === child.href
-                                ? 'bg-white/20 text-white'
-                                : 'text-white/70 hover:bg-white/10 hover:text-white'
+                                ? "bg-white/20 text-white"
+                                : "text-white/70 hover:bg-white/10 hover:text-white"
                             }`}
                           >
                             {child.name}
@@ -98,8 +98,8 @@ const Navbar = () => {
                   href={item.href}
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
                     pathname === item.href
-                      ? 'bg-white/20 text-white'
-                      : 'text-white/80 hover:bg-white/10 hover:text-white'
+                      ? "bg-white/20 text-white"
+                      : "text-white/80 hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   <span className="text-sm font-medium">{item.name}</span>

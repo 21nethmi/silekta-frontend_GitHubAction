@@ -197,7 +197,7 @@ export default function ReturnsPage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/orders"
-                className="px-3 py-2 bg-[#48d0c7] text-white rounded-md text-sm hover:bg-[#78b7a9]"
+                className="px-3 py-2 bg-[#297772] text-white rounded-md text-sm hover:bg-[#78b7a9]"
               >
                 Back to Orders
               </Link>
@@ -245,7 +245,7 @@ export default function ReturnsPage() {
                     if (c) {
                       return (
                         <div className="mb-3">
-                          <div className="font-medium">{c.name}</div>
+                          <div className="font-medium text-gray-500">{c.name}</div>
                           <div className="text-xs text-gray-700">
                             {c.phone} • {c.email}
                           </div>
@@ -264,7 +264,7 @@ export default function ReturnsPage() {
                         className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded"
                       >
                         <div className="flex-1">
-                          <div className="font-medium">{p.name}</div>
+                          <div className="font-medium text-gray-700">{p.name}</div>
                           <div className="text-xs text-gray-700">
                             {p.sku ?? ""} •{" "}
                             {p.category === "paper"
@@ -285,7 +285,7 @@ export default function ReturnsPage() {
                               onChange={(e) =>
                                 handleQtyChange(idx, Number(e.target.value))
                               }
-                              className="w-20 px-2 py-1 border rounded-md"
+                              className="w-20 px-2 py-1 border rounded-md text-gray-600"
                             />
                           </div>
                           <input
@@ -294,7 +294,7 @@ export default function ReturnsPage() {
                             onChange={(e) =>
                               handleReasonChange(idx, e.target.value)
                             }
-                            className="mt-2 w-full px-2 py-1 border rounded-md"
+                            className="mt-2 w-full px-2 py-1 border rounded-md text-gray-600"
                           />
                         </div>
                       </div>
@@ -303,7 +303,7 @@ export default function ReturnsPage() {
 
                   <div className="mt-4 flex items-center justify-between">
                     <div className="text-sm text-gray-600">Refund amount</div>
-                    <div className="text-lg font-semibold">
+                    <div className="text-lg font-semibold text-black">
                       Rs {computeRefund().toFixed(2)}
                     </div>
                   </div>
