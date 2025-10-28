@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import { useOrders } from "@/context/OrdersContext";
 
 interface ReturnItem {
   sku?: string;
@@ -22,21 +22,11 @@ interface ReturnRecord {
 }
 
 export default function ReturnsHistoryPage() {
-  const KEY = "silekta_returns";
-  const [returns, setReturns] = useState<ReturnRecord[]>([]);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) setReturns(JSON.parse(raw) as ReturnRecord[]);
-    } catch (e) {
-      // ignore
-    }
-  }, []);
+  // read returns from OrdersContext (in-memory)
+  const { returns, setReturns } = useOrders();
 
   const clearHistory = () => {
     if (!confirm("Clear all return history? This cannot be undone.")) return;
-    localStorage.removeItem(KEY);
     setReturns([]);
   };
 
@@ -103,7 +93,9 @@ export default function ReturnsHistoryPage() {
                       className="flex items-center justify-between bg-gray-50 p-2 rounded"
                     >
                       <div>
-                        <div className="font-medium text-gray-500">{it.name}</div>
+                        <div className="font-medium text-gray-500">
+                          {it.name}
+                        </div>
                         <div className="text-xs text-gray-700">
                           {it.sku ?? ""} • Qty: {it.qty} • Rs{" "}
                           {it.unitPrice.toFixed(2)}
