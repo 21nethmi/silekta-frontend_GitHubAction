@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'next/navigation';
+import { getCurrentUser, isAdmin } from '@/lib/mockAuth';
 
 interface Employee {
   id: string;
@@ -19,6 +20,21 @@ const PayrollPage = () => {
     { id: 'EMP002', name: 'Jane Smith', basicSalary: 55000, otHours: 5, total: 57500 },
     { id: 'EMP003', name: 'Alex Perera', basicSalary: 50000, otHours: 8, total: 54000 },
   ]);
+
+  // Protect route - only admins can access
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (!user) {
+      router.push('/login');
+    } else if (!isAdmin()) {
+      router.push('/home');
+    }
+  }, [router]);
+
+  // Don't render if not admin
+  if (!isAdmin()) {
+    return null;
+  }
 
   const handleViewPaysheet = (employee: Employee) => {
     router.push(`/paysheet/${employee.id}`);

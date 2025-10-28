@@ -2,18 +2,36 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { getCurrentUser } from "@/lib/mockAuth";
+
+// Define types for navigation items
+type NavItem = {
+  name: string;
+  href?: string;
+  children?: { name: string; href: string }[];
+};
 
 const Navbar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const [currentUserRole, setCurrentUserRole] = useState<'admin' | 'employee' | null>(null);
 
   // Track which dropdown is open
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  // Define navigation structure
-  const navItems = [
+  // Check user role on mount
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (user) {
+      setCurrentUserRole(user.role);
+    }
+  }, []);
+
+  // Define navigation structure for ADMIN
+  const adminNavItems: NavItem[] = [
     { name: "Dashboard", href: "/dashboard" },
     { name: "Customer Management", href: "/customers" },
     { name: "Order Management", href: "/orders" },
@@ -31,9 +49,32 @@ const Navbar = () => {
     { name: "Report & Analytics", href: "/reports" },
   ];
 
+  // Define navigation structure for EMPLOYEE (no Dashboard, Employee Management, Payroll, or Reports)
+  const employeeNavItems: NavItem[] = [
+    { name: "Home", href: "/home" },
+    { name: "Customer Management", href: "/customers" },
+    { name: "Order Management", href: "/orders" },
+    { name: "Supplier & Purchase", href: "/suppliers" },
+    { name: "Inventory Management", href: "/inventory" },
+    { name: "Production Management", href: "/production" },
+    { name: "Billing & Invoice", href: "/billing" },
+  ];
+
+  // Select navigation items based on role
+  const navItems = currentUserRole === 'admin' ? adminNavItems : employeeNavItems;
+
   // Toggle dropdown open/close
   const toggleDropdown = (name: string) => {
     setOpenDropdown((prev) => (prev === name ? null : name));
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('currentUser');
+      sessionStorage.removeItem('currentUser');
+    }
+    router.push('/login');
   };
 
   return (
@@ -42,6 +83,7 @@ const Navbar = () => {
       <div className="p-6 border-b border-[#0B5351]/20">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-white/20 rounded flex items-center justify-center">
+
             <Image
               src="/Logo (2).png"
               alt="Silekta Logo"
@@ -94,16 +136,18 @@ const Navbar = () => {
                   )}
                 </>
               ) : (
-                <Link
-                  href={item.href}
-                  className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    pathname === item.href
-                      ? "bg-white/20 text-white"
-                      : "text-white/80 hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  <span className="text-sm font-medium">{item.name}</span>
-                </Link>
+                item.href && (
+                  <Link
+                    href={item.href}
+                    className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+                      pathname === item.href
+                        ? "bg-white/20 text-white"
+                        : "text-white/80 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <span className="text-sm font-medium">{item.name}</span>
+                  </Link>
+                )
               )}
             </li>
           ))}
@@ -112,7 +156,10 @@ const Navbar = () => {
 
       {/* Logout Button */}
       <div className="p-4 border-t border-[#0B5351]/20">
-        <button className="w-full bg-[#DE8080] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#DE8080]/90 transition-colors">
+        <button 
+          onClick={handleLogout}
+          className="w-full bg-[#DE8080] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#DE8080]/90 transition-colors"
+        >
           Logout
         </button>
       </div>

@@ -1,13 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import ReportForm, { ReportType, ReportConfig } from '@/components/ReportForm';
 import ReportView from '@/components/ReportView';
 import Navbar from '@/components/Navbar';
+import { getCurrentUser, isAdmin } from '@/lib/mockAuth';
 
 const ReportsPage = () => {
+  const router = useRouter();
   const [showReport, setShowReport] = useState(false);
   const [reportConfig, setReportConfig] = useState<ReportConfig | null>(null);
+
+  // Protect route - only admins can access
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (!user) {
+      router.push('/login');
+    } else if (!isAdmin()) {
+      router.push('/home');
+    }
+  }, [router]);
+
+  // Don't render if not admin
+  if (!isAdmin()) {
+    return null;
+  }
 
   const handleGenerateReport = (config: ReportConfig) => {
     setReportConfig(config);

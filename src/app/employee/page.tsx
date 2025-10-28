@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import { getCurrentUser, isAdmin } from '@/lib/mockAuth';
 import { Plus } from 'lucide-react';
 
 interface Employee {
@@ -13,14 +14,27 @@ interface Employee {
 
 export default function EmployeePage() {
   const router = useRouter();
-
   const [employees, setEmployees] = useState<Employee[]>([
     { id: 1, name: 'John Doe', status: 'Active' },
   ]);
-
   const [newEmployee, setNewEmployee] = useState('');
   const [status, setStatus] = useState<'Active' | 'Inactive'>('Active');
   const [showForm, setShowForm] = useState(false);
+
+  // Protect route - only admins can access
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (!user) {
+      router.push('/login');
+    } else if (!isAdmin()) {
+      router.push('/home');
+    }
+  }, [router]);
+
+  // Don't render if not admin
+  if (!isAdmin()) {
+    return null;
+  }
 
   const addEmployee = () => {
     if (!newEmployee.trim()) return;
