@@ -723,7 +723,7 @@ const OrdersPage = () => {
                         className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded"
                       >
                         <div>
-                          <div className="font-medium">{p.name}</div>
+                          <div className="font-medium text-black">{p.name}</div>
                           <div className="text-xs text-gray-700">
                             {p.category === "paper"
                               ? "Paper-based"
@@ -803,7 +803,7 @@ const OrdersPage = () => {
                   <label className="block text-sm text-gray-700 mb-1">
                     Customer
                   </label>
-                  <div className="relative" ref={customerRef}>
+                  <div className="relative text-black" ref={customerRef}>
                     <input
                       type="text"
                       value={createForm.customer}
@@ -890,8 +890,8 @@ const OrdersPage = () => {
                 </div>
 
                 <div className="border rounded p-3 bg-white">
-                  <div className="text-sm font-medium mb-2">Add product</div>
-                  <div className="grid grid-cols-1 gap-2">
+                  <div className="text-sm font-medium mb-2 text-gray-700">Add product</div>
+                  <div className="grid grid-cols-1 gap-2 text-gray-600">
                     <input
                       placeholder="Product name"
                       type="text"
@@ -902,7 +902,7 @@ const OrdersPage = () => {
                           name: e.target.value,
                         })
                       }
-                      className="w-full px-3 py-2 border rounded-md"
+                      className="w-full px-3 py-2 border rounded-md text-gray-500"
                     />
                     <div className="flex gap-2">
                       <select
@@ -947,7 +947,7 @@ const OrdersPage = () => {
                     <div className="pt-2">
                       <button
                         onClick={handleAddCurrentProduct}
-                        className="px-3 py-2 bg-[#8CBCB9] text-white rounded-md"
+                        className="px-3 py-2 bg-[#2bd962] text-white rounded-md"
                       >
                         Add Product
                       </button>
@@ -965,7 +965,7 @@ const OrdersPage = () => {
                             className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded"
                           >
                             <div>
-                              <div className="font-medium">{p.name}</div>
+                              <div className="font-medium text-black">{p.name}</div>
                               <div className="text-xs text-gray-500">
                                 {p.category === "paper"
                                   ? "Paper-based"
@@ -973,7 +973,7 @@ const OrdersPage = () => {
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
-                              <div className="text-sm">
+                              <div className="text-sm text-gray-500">
                                 {p.qty} × Rs {p.unitPrice.toFixed(2)}
                               </div>
                               <button
@@ -993,7 +993,7 @@ const OrdersPage = () => {
                           </div>
                         ))}
                       </div>
-                      <div className="mt-3 text-right font-semibold">
+                      <div className="mt-3 text-right font-semibold text-gray-600">
                         Total: Rs{" "}
                         {createForm.products
                           .reduce((s, p) => s + p.qty * p.unitPrice, 0)
@@ -1007,7 +1007,7 @@ const OrdersPage = () => {
               <div className="flex items-center justify-end gap-3 mt-4">
                 <button
                   onClick={() => setIsCreateOpen(false)}
-                  className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300"
+                  className="px-4 py-2 rounded-md bg-gray-400 hover:bg-gray-300"
                 >
                   Cancel
                 </button>

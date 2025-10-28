@@ -82,7 +82,7 @@ export default function ReturnsHistoryPage() {
               <div key={r.id} className="bg-white p-4 rounded shadow">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium">Return {r.id}</div>
+                    <div className="font-medium text-black">Return {r.id}</div>
                     <div className="text-sm text-gray-700">
                       Order {r.orderId} •{" "}
                       {new Date(r.createdAt).toLocaleString()}
@@ -90,7 +90,7 @@ export default function ReturnsHistoryPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-gray-700">Total Refund</div>
-                    <div className="font-semibold">
+                    <div className="font-semibold text-gray-400">
                       Rs {r.totalRefund.toFixed(2)}
                     </div>
                   </div>
@@ -103,7 +103,7 @@ export default function ReturnsHistoryPage() {
                       className="flex items-center justify-between bg-gray-50 p-2 rounded"
                     >
                       <div>
-                        <div className="font-medium">{it.name}</div>
+                        <div className="font-medium text-gray-500">{it.name}</div>
                         <div className="text-xs text-gray-700">
                           {it.sku ?? ""} • Qty: {it.qty} • Rs{" "}
                           {it.unitPrice.toFixed(2)}
@@ -114,7 +114,7 @@ export default function ReturnsHistoryPage() {
                           </div>
                         )}
                       </div>
-                      <div className="font-medium">
+                      <div className="font-medium text-black">
                         Rs {it.refund.toFixed(2)}
                       </div>
                     </div>

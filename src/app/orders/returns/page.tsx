@@ -197,7 +197,7 @@ export default function ReturnsPage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/orders"
-                className="px-3 py-2 bg-[#8CBCB9] text-white rounded-md text-sm hover:bg-[#78b7a9]"
+                className="px-3 py-2 bg-[#48d0c7] text-white rounded-md text-sm hover:bg-[#78b7a9]"
               >
                 Back to Orders
               </Link>
@@ -219,7 +219,7 @@ export default function ReturnsPage() {
                 <select
                   value={selectedOrderId}
                   onChange={(e) => setSelectedOrderId(e.target.value)}
-                  className="mt-2 w-full px-3 py-2 border rounded-md"
+                  className="mt-2 w-full px-3 py-2 border rounded-md text-gray-400"
                 >
                   <option value="">-- choose order --</option>
                   {orders.map((o) => (
