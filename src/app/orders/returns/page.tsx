@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { getCustomerById, getCustomerByName } from "@/lib/customers";
+import { useOrders } from "@/context/OrdersContext";
 
 type OrderStatus = "In Progress" | "Completed" | "Cancelled";
 
@@ -36,52 +37,13 @@ interface ReturnItem {
 }
 
 export default function ReturnsPage() {
-  const STORAGE_KEY = "silekta_orders";
-  const RETURNS_KEY = "silekta_returns";
-
-  const [orders, setOrders] = useState<Order[]>([]);
+  // use in-memory orders & returns from OrdersContext (no localStorage)
+  const { orders, setOrders, setReturns } = useOrders();
   const [selectedOrderId, setSelectedOrderId] = useState<string>("");
   const [returnQtys, setReturnQtys] = useState<Record<number, number>>({});
   const [reasons, setReasons] = useState<Record<number, string>>({});
   const [message, setMessage] = useState<string | null>(null);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as any[];
-        const migrated: Order[] = parsed.map((o) => {
-          if (!o) return o as Order;
-          if (o.customerName || o.customerId) return o as Order;
-          const custStr = o.customer as string | undefined;
-          let customerId: string | undefined = undefined;
-          let customerName = custStr ?? "";
-          if (custStr) {
-            const m = custStr.match(/^(CUST-[0-9]+)\s+—\s*(.*)$/);
-            if (m) {
-              customerId = m[1];
-              customerName = m[2] ?? customerName;
-            }
-          }
-          return { ...o, customerId, customerName } as Order;
-        });
-        setOrders(migrated);
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, []);
-
-  // Persist migrated shape immediately so other pages see stable customerId/customerName
-  useEffect(() => {
-    try {
-      if (orders && orders.length) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, [orders]);
+  // No localStorage migration here - OrdersProvider seeds orders with correct shape
 
   const searchParams = useSearchParams();
 
@@ -153,28 +115,18 @@ export default function ReturnsPage() {
       return { ...o, products: updatedProducts, total: newTotal };
     });
 
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedOrders));
-      setOrders(updatedOrders);
-    } catch (e) {
-      // ignore
-    }
+    // update in-memory orders
+    setOrders(updatedOrders);
 
-    // Save return record
-    try {
-      const raw = localStorage.getItem(RETURNS_KEY);
-      const prev = raw ? (JSON.parse(raw) as any[]) : [];
-      const ret = {
-        id: `RET-${Date.now()}`,
-        orderId: selectedOrder.id,
-        items: itemsToReturn,
-        totalRefund: itemsToReturn.reduce((s, it) => s + it.refund, 0),
-        createdAt: new Date().toISOString(),
-      };
-      localStorage.setItem(RETURNS_KEY, JSON.stringify([ret, ...prev]));
-    } catch (e) {
-      // ignore
-    }
+    // Save return record to in-memory returns list
+    const ret = {
+      id: `RET-${Date.now()}`,
+      orderId: selectedOrder.id,
+      items: itemsToReturn,
+      totalRefund: itemsToReturn.reduce((s, it) => s + it.refund, 0),
+      createdAt: new Date().toISOString(),
+    };
+    setReturns((prev) => [ret, ...prev]);
 
     setReturnQtys({});
     setReasons({});
