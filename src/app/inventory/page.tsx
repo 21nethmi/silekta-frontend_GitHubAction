@@ -326,7 +326,7 @@ const InventoryPage = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredData.map((item, index) => (
+                  {filteredData.map((item) => (
                     <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-200 bg-white">
                       <td className="px-4 py-3 whitespace-nowrap">
                         <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[#0B5351]/10 text-[#0B5351]">
