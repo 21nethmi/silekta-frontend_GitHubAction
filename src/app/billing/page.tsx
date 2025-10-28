@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
+import { FileText, DollarSign, Clock, AlertTriangle } from 'lucide-react';
 
 interface InvoiceItem {
   id: string;
@@ -238,238 +239,358 @@ const BillingPage = () => {
       <Navbar />
       
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4 flex-shrink-0">
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-          </div>
-        </div>
-
         {/* Main Content */}
-        <div className="flex-1 p-6 overflow-y-auto">
-          {/* Centered Header Section */}
-          <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Billing & Invoice Management</h1>
-            <p className="text-gray-600">Manage invoices, track payments, and streamline billing processes</p>
+        <div className="flex-1 p-8 overflow-y-auto bg-gradient-to-br from-gray-50 to-gray-100">
+          {/* Clean Header Section */}
+          <div className="mb-6">
+            <div className="text-left mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#0B5351] mb-2">
+                Billing & Invoice Management
+              </h1>
+            </div>
           </div>
 
-          {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Total Invoices</p>
+          {/* Financial Overview */}
+          <div className="bg-gradient-to-r from-green-50 to-emerald-100 rounded-2xl shadow-lg border-2 border-[#0B5351]/20 overflow-hidden mb-8 shadow-[#0B5351]/10">
+            <div className="p-6 border-b border-gray-200">
+              <div className="mb-4 p-3 border-b border-gray-300">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Financial Overview
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Total Invoices Card */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-[#0B5351] rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <FileText className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-600 mb-2">Total Invoices</p>
                   <p className="text-2xl font-bold text-gray-900">{totalInvoices}</p>
                 </div>
-                <div className="w-12 h-12 bg-[#0B5351]/10 rounded-lg flex items-center justify-center">
-                  <span className="text-[#0B5351] text-xl">📄</span>
-                </div>
-              </div>
-            </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                  <p className="text-2xl font-bold text-green-600">Rs {totalRevenue.toLocaleString()}</p>
+                {/* Total Revenue Card */}
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl shadow-sm border border-green-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-900 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <DollarSign className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-green-700 mb-2">Total Revenue</p>
+                  <p className="text-2xl font-bold text-green-800">Rs {totalRevenue.toLocaleString()}</p>
                 </div>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <span className="text-green-600 text-xl">💰</span>
-                </div>
-              </div>
-            </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Pending Amount</p>
-                  <p className="text-2xl font-bold text-yellow-600">Rs {pendingAmount.toLocaleString()}</p>
+                {/* Pending Amount Card */}
+                <div className="bg-gradient-to-br from-yellow-50 to-amber-50 p-6 rounded-xl shadow-sm border border-yellow-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-gradient-to-r from-yellow-800 to-amber-600 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <Clock className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-yellow-700 mb-2">Pending Amount</p>
+                  <p className="text-2xl font-bold text-yellow-800">Rs {pendingAmount.toLocaleString()}</p>
                 </div>
-                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <span className="text-yellow-600 text-xl">⏰</span>
-                </div>
-              </div>
-            </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Overdue</p>
-                  <p className="text-2xl font-bold text-red-600">{overdueInvoices}</p>
-                </div>
-                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                  <span className="text-red-600 text-xl">⚠️</span>
+                {/* Overdue Card */}
+                <div className="bg-gradient-to-br from-red-50 to-rose-100 p-6 rounded-xl shadow-sm border border-red-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-rose-900 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <AlertTriangle className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-red-700 mb-2">Overdue</p>
+                  <p className="text-2xl font-bold text-red-800">{overdueInvoices}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-center mb-6">
-            <button 
-              onClick={handleCreateInvoice}
-              className="bg-[#8CBCB9] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#8CBCB9]/90 transition-all duration-200 shadow-md flex items-center space-x-2"
-            >
-              <span className="text-xl">+</span>
-              <span>Create New Invoice</span>
-            </button>
-          </div>
-
-          {/* Search and Filter Section */}
-          <div className="flex flex-col items-center space-y-4 mb-6">
-            {/* Search Bar */}
-            <div className="w-full max-w-2xl">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search by customer name or invoice number..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-3 text-base text-gray-900 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0B5351] focus:border-[#0B5351] transition-all duration-200 shadow-sm placeholder-gray-600"
-                />
-                {searchTerm && (
-                  <button
-                    onClick={() => setSearchTerm('')}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          {/* Manage Invoices */}
+          <div className="bg-gradient-to-r from-green-50 to-emerald-100 rounded-2xl shadow-lg border-2 border-[#0B5351]/20 overflow-hidden mb-8 shadow-[#0B5351]/10">
+            {/* Quick Actions Section */}
+            <div className="p-6 border-b">
+              <div className="mb-4 p-3 border-b border-gray-300">
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Manage Invoices
+                </h3>
+              </div>
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                  {/* Create Invoice Button */}
+                  <button 
+                    onClick={handleCreateInvoice}
+                    className="group bg-gradient-to-r from-[#0B5351] to-[#0A4B47] text-white px-6 py-3 rounded-xl font-semibold hover:from-[#0A4B47] hover:to-[#083936] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 flex items-center justify-center space-x-2 relative overflow-hidden"
                   >
-                    ✕
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center group-hover:rotate-180 transition-transform duration-300 relative z-10">
+                      <span className="text-lg font-bold">+</span>
+                    </div>
+                    <span className="relative z-10">Create New Invoice</span>
                   </button>
-                )}
+
+                  {/* Search Bar */}
+                  <div className="relative flex-1 sm:w-64">
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-[#0B5351] transition-colors duration-300">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search invoices..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-10 py-3 text-sm text-gray-900 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0B5351] focus:border-[#0B5351] hover:shadow-md transition-all duration-300"
+                    />
+                    {searchTerm && (
+                      <button
+                        onClick={() => setSearchTerm('')}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500 hover:scale-110 transition-all duration-300"
+                      >
+                        <div className="w-5 h-5 bg-gray-200 hover:bg-red-100 rounded-full flex items-center justify-center">
+                          ✕
+                        </div>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Status Filter */}
+                  <div className="flex bg-gray-100 rounded-xl border border-gray-200 p-1 shadow-sm">
+                    <button
+                      onClick={() => setActiveTab('all')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative overflow-hidden group ${
+                        activeTab === 'all'
+                          ? 'bg-gradient-to-r from-[#0B5351] to-[#0A4B47] text-white transform scale-105 shadow-lg'
+                          : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 hover:text-[#0B5351] hover:shadow-md'
+                      }`}
+                    >
+                      {activeTab === 'all' && <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>}
+                      <span className="relative z-10">All</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('paid')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative overflow-hidden group ${
+                        activeTab === 'paid'
+                          ? 'bg-gradient-to-r from-green-600 to-green-700 text-white transform scale-105 shadow-lg'
+                          : 'text-gray-600 hover:bg-gradient-to-r hover:from-green-100 hover:to-green-200 hover:text-green-700 hover:shadow-md'
+                      }`}
+                    >
+                      {activeTab === 'paid' && <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>}
+                      <span className="relative z-10">Paid</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('pending')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative overflow-hidden group ${
+                        activeTab === 'pending'
+                          ? 'bg-gradient-to-r from-yellow-600 to-yellow-700 text-white transform scale-105 shadow-lg'
+                          : 'text-gray-600 hover:bg-gradient-to-r hover:from-yellow-100 hover:to-yellow-200 hover:text-yellow-700 hover:shadow-md'
+                      }`}
+                    >
+                      {activeTab === 'pending' && <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>}
+                      <span className="relative z-10">Pending</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('overdue')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative overflow-hidden group ${
+                        activeTab === 'overdue'
+                          ? 'bg-gradient-to-r from-red-600 to-red-700 text-white transform scale-105 shadow-lg'
+                          : 'text-gray-600 hover:bg-gradient-to-r hover:from-red-100 hover:to-red-200 hover:text-red-700 hover:shadow-md'
+                      }`}
+                    >
+                      {activeTab === 'overdue' && <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>}
+                      <span className="relative z-10">Overdue</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Status Filter */}
-            <div className="bg-gray-100 rounded-lg p-1 flex shadow-sm">
-              <button
-                onClick={() => setActiveTab('all')}
-                className={`px-6 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${getTabButtonColor('all')}`}
-              >
-                All Invoices
-              </button>
-              <button
-                onClick={() => setActiveTab('paid')}
-                className={`px-6 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${getTabButtonColor('paid')}`}
-              >
-                Paid ({paidInvoices})
-              </button>
-              <button
-                onClick={() => setActiveTab('pending')}
-                className={`px-6 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${getTabButtonColor('pending')}`}
-              >
-                Pending ({pendingInvoices})
-              </button>
-              <button
-                onClick={() => setActiveTab('overdue')}
-                className={`px-6 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${getTabButtonColor('overdue')}`}
-              >
-                Overdue ({overdueInvoices})
-              </button>
-            </div>
-          </div>
-
-          {/* Invoices Table */}
-          <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-            <div className="px-4 py-3 bg-white border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-800">
-                Invoices 
-                <span className="ml-2 text-sm text-gray-500">({filteredInvoices.length} invoices)</span>
-              </h3>
-            </div>
-            <div className="overflow-x-auto max-h-96">
-              <table className="w-full">
-                <thead className="bg-gray-50">
+            {/* Invoices Table Section */}
+            <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl shadow-sm border border-gray-200">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="overflow-x-auto max-h-[500px] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                  <table className="w-full">
+                    <thead className="bg-gradient-to-r from-[#0B5351] to-[#0A4B47] sticky top-0">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Invoice #
+                    <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
+                      <div className="flex items-center space-x-1">
+                        <span>Invoice #</span>
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3z"></path>
+                        </svg>
+                      </div>
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Customer
+                    <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
+                      <div className="flex items-center space-x-1">
+                        <span>Customer</span>
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                      </div>
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Due Date
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Amount
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Actions
-                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Date</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Due Date</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Amount</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-center text-xs font-bold text-white uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredInvoices.map((invoice) => (
-                    <tr key={invoice.id} className="hover:bg-gray-50 transition-colors duration-200">
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[#0B5351]/10 text-[#0B5351]">
-                          {invoice.invoiceNumber}
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {filteredInvoices.map((invoice, index) => (
+                    <tr key={invoice.id} className="group cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-300"
+                      style={{ animationDelay: `${index * 50}ms` }}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-1 h-8 bg-[#0B5351] rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-110"></div>
+                          <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0B5351]/10 text-[#0B5351] border border-[#0B5351]/20 group-hover:scale-105 group-hover:bg-[#0B5351]/20 transition-all duration-300">
+                            {invoice.invoiceNumber}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-[#0B5351]/10 rounded-full flex items-center justify-center group-hover:bg-[#0B5351]/20 group-hover:scale-110 transition-all duration-300">
+                            <span className="text-sm font-bold text-[#0B5351] group-hover:text-[#0A4B47] transition-colors duration-300">
+                              {invoice.customerName.charAt(0)}
+                            </span>
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-gray-900 group-hover:text-[#0B5351] transition-colors duration-300">
+                              {invoice.customerName}
+                            </div>
+                            <div className="text-xs text-gray-500 group-hover:text-gray-600">
+                              {invoice.customerEmail}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                          <span>{invoice.date}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                          <span>{invoice.dueDate}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-lg font-bold text-gray-900 group-hover:text-[#0B5351] transition-all duration-300 group-hover:scale-105">
+                          Rs {invoice.totalAmount.toLocaleString()}
                         </span>
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{invoice.customerName}</div>
-                        <div className="text-xs text-gray-500">{invoice.customerEmail}</div>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                        {invoice.date}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                        {invoice.dueDate}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                        <span className="font-semibold">Rs {invoice.totalAmount.toLocaleString()}</span>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full capitalize ${getStatusBadgeColor(invoice.paymentStatus)}`}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold border capitalize ${
+                          invoice.paymentStatus === 'paid' 
+                            ? 'bg-green-100 text-[#0B5351] border-green-300'
+                            : invoice.paymentStatus === 'pending'
+                            ? 'bg-yellow-100 text-[#0B5351] border-yellow-300'
+                            : 'bg-red-100 text-[#0B5351] border-red-300'
+                        } shadow-md`}>
+                          <div className={`w-2 h-2 rounded-full mr-2 ${
+                            invoice.paymentStatus === 'paid' ? 'bg-green-500 animate-pulse' : 
+                            invoice.paymentStatus === 'pending' ? 'bg-yellow-500' : 'bg-red-500'
+                          }`}></div>
                           {invoice.paymentStatus}
                         </span>
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-center">
-                        <div className="flex justify-center space-x-2">
+                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                        <div className="flex justify-center items-center space-x-3 min-h-[40px]">
                           <button 
                             onClick={() => handlePreviewInvoice(invoice)}
-                            className="bg-[#0B5351] text-white px-3 py-1 rounded text-xs font-medium hover:bg-[#0B5351]/90 transition-colors"
+                            className="group bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold hover:from-emerald-700 hover:to-emerald-800 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 transform flex items-center space-x-2 relative overflow-hidden"
                           >
-                            Preview
+                            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <svg className="w-3 h-3 group-hover:rotate-12 transition-transform duration-300 relative z-10" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                              <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/>
+                            </svg>
+                            <span className="relative z-10">Preview</span>
                           </button>
-                          {invoice.paymentStatus === 'pending' && (
-                            <button 
-                              onClick={() => updatePaymentStatus(invoice.id, 'paid')}
-                              className="bg-green-500 text-white px-3 py-1 rounded text-xs font-medium hover:bg-green-600 transition-colors"
-                            >
-                              Mark Paid
-                            </button>
-                          )}
+                          
+                          {/* Fixed width container for the second button to maintain alignment */}
+                          <div className="w-[110px] flex justify-center">
+                            {(invoice.paymentStatus === 'pending' || invoice.paymentStatus === 'overdue') && (
+                              <button 
+                                onClick={() => updatePaymentStatus(invoice.id, 'paid')}
+                                className="group bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold hover:from-emerald-700 hover:to-emerald-800 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 transform flex items-center space-x-2 relative overflow-hidden"
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <svg className="w-3 h-3 group-hover:rotate-12 transition-transform duration-300 relative z-10" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                                </svg>
+                                <span className="relative z-10">Mark Paid</span>
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+                </div>
+              </div>
             </div>
           </div>
 
           {filteredInvoices.length === 0 && (
-            <div className="text-center py-16">
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No invoices found</h3>
-              <p className="text-gray-500 mb-6">
-                {searchTerm 
-                  ? `No invoices match "${searchTerm}" in ${activeTab} status`
-                  : `No ${activeTab} invoices available`
-                }
-              </p>
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm('')}
-                  className="bg-[#0B5351] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#0B5351]/90 transition-colors"
-                >
-                  Clear Search
-                </button>
-              )}
+            <div className="bg-white rounded-2xl border-2 border-dashed border-gray-300 py-20 text-center relative overflow-hidden shadow-sm">
+              {/* Background decoration */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0B5351]/5 via-transparent to-[#8CBCB9]/5"></div>
+              
+              <div className="relative z-10">
+                {/* Icon */}
+                <div className="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                  <svg className="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                </div>
+                
+                <h3 className="text-2xl font-bold text-gray-700 mb-4">No invoices found</h3>
+                <p className="text-gray-500 mb-8 max-w-md mx-auto leading-relaxed">
+                  {searchTerm 
+                    ? (
+                      <>
+                        No invoices match <span className="font-semibold text-[#0B5351]">"{searchTerm}"</span> in <span className="font-semibold">{activeTab}</span> status
+                      </>
+                    )
+                    : `No ${activeTab} invoices available yet. Create your first invoice to get started.`
+                  }
+                </p>
+                
+                <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+                  {searchTerm ? (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="bg-gradient-to-r from-[#0B5351] to-[#8CBCB9] text-white px-8 py-3 rounded-xl font-bold hover:from-[#8CBCB9] hover:to-[#0B5351] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 flex items-center space-x-2 relative overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <svg className="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
+                      <span className="relative z-10">Clear Search</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleCreateInvoice}
+                      className="bg-gradient-to-r from-[#8CBCB9] to-[#0B5351] text-white px-8 py-3 rounded-xl font-bold hover:from-[#0B5351] hover:to-[#8CBCB9] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 flex items-center space-x-2 relative overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center relative z-10">
+                        <span className="text-sm font-bold">+</span>
+                      </div>
+                      <span className="relative z-10">Create Your First Invoice</span>
+                    </button>
+                  )}
+                  
+                  <button
+                    onClick={() => setActiveTab('all')}
+                    className="text-[#0B5351] font-semibold hover:text-[#8CBCB9] transition-colors duration-300 flex items-center space-x-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                    </svg>
+                    <span>View All Invoices</span>
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -479,12 +600,19 @@ const BillingPage = () => {
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50 rounded-t-xl">
+              <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-l-4 border-[#0B5351]">
+                <h2 className="text-2xl font-bold text-gray-900">Create New Invoice</h2>
+              </div>
+            </div>
+            
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New Invoice</h2>
-              
               {/* Customer Information */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Customer Information</h3>
+                <div className="mb-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-l-4 border-[#0B5351]">
+                  <h3 className="text-lg font-semibold text-gray-800">Customer Information</h3>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Customer Name</label>
@@ -521,7 +649,7 @@ const BillingPage = () => {
 
               {/* Invoice Items */}
               <div className="mb-6">
-                <div className="flex justify-between items-center mb-4">
+                <div className="mb-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-l-4 border-[#0B5351] flex justify-between items-center">
                   <h3 className="text-lg font-semibold text-gray-800">Invoice Items</h3>
                   <button
                     onClick={addInvoiceItem}
@@ -606,7 +734,9 @@ const BillingPage = () => {
 
               {/* Notes */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
+                <div className="mb-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-l-4 border-[#0B5351]">
+                  <h3 className="text-lg font-semibold text-gray-800">Notes (Optional)</h3>
+                </div>
                 <textarea
                   value={customerInfo.notes}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, notes: e.target.value })}
@@ -640,8 +770,9 @@ const BillingPage = () => {
       {isPreviewModalOpen && selectedInvoice && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50 rounded-t-xl">
+              <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-l-4 border-[#0B5351] flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gray-900">Invoice Preview</h2>
                 <button
                   onClick={() => setIsPreviewModalOpen(false)}
@@ -650,6 +781,9 @@ const BillingPage = () => {
                   <span className="text-2xl">×</span>
                 </button>
               </div>
+            </div>
+            
+            <div className="p-6">
               
               {/* Professional Invoice Layout */}
               <div className="bg-white border rounded-lg p-8" id="invoice-content">
@@ -657,8 +791,8 @@ const BillingPage = () => {
                 <div className="flex justify-between items-start mb-8">
                   <div>
                     <h1 className="text-3xl font-bold text-[#0B5351]">Silekta Holdings</h1>
-                    <p className="text-gray-600">Paper Products & Printing Solutions</p>
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-gray-800">Paper Products & Printing Solutions</p>
+                    <p className="text-sm text-gray-700 mt-2">
                       123 Industrial Road, Colombo 10<br/>
                       Phone: +94 11 234 5678<br/>
                       Email: info@silekta.lk
@@ -666,16 +800,16 @@ const BillingPage = () => {
                   </div>
                   <div className="text-right">
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">INVOICE</h2>
-                    <p className="text-sm text-gray-600">Invoice #: {selectedInvoice.invoiceNumber}</p>
-                    <p className="text-sm text-gray-600">Date: {selectedInvoice.date}</p>
-                    <p className="text-sm text-gray-600">Due Date: {selectedInvoice.dueDate}</p>
+                    <p className="text-sm text-gray-800">Invoice #: {selectedInvoice.invoiceNumber}</p>
+                    <p className="text-sm text-gray-800">Date: {selectedInvoice.date}</p>
+                    <p className="text-sm text-gray-800">Due Date: {selectedInvoice.dueDate}</p>
                   </div>
                 </div>
 
                 {/* Bill To */}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Bill To:</h3>
-                  <div className="text-gray-600">
+                  <div className="text-gray-800">
                     <p className="font-medium">{selectedInvoice.customerName}</p>
                     <p>{selectedInvoice.customerEmail}</p>
                     <p className="whitespace-pre-line">{selectedInvoice.customerAddress}</p>
@@ -684,22 +818,22 @@ const BillingPage = () => {
 
                 {/* Items Table */}
                 <div className="mb-8">
-                  <table className="w-full border-collapse border border-gray-300">
+                  <table className="w-full border-collapse border border-gray-400">
                     <thead>
-                      <tr className="bg-gray-50">
-                        <th className="border border-gray-300 px-4 py-2 text-left">Description</th>
-                        <th className="border border-gray-300 px-4 py-2 text-right">Qty</th>
-                        <th className="border border-gray-300 px-4 py-2 text-right">Unit Price</th>
-                        <th className="border border-gray-300 px-4 py-2 text-right">Total</th>
+                      <tr className="bg-gray-100">
+                        <th className="border border-gray-400 px-4 py-2 text-left text-gray-900 font-semibold">Description</th>
+                        <th className="border border-gray-400 px-4 py-2 text-right text-gray-900 font-semibold">Qty</th>
+                        <th className="border border-gray-400 px-4 py-2 text-right text-gray-900 font-semibold">Unit Price</th>
+                        <th className="border border-gray-400 px-4 py-2 text-right text-gray-900 font-semibold">Total</th>
                       </tr>
                     </thead>
                     <tbody>
                       {selectedInvoice.items.map((item, index) => (
                         <tr key={index}>
-                          <td className="border border-gray-300 px-4 py-2">{item.name}</td>
-                          <td className="border border-gray-300 px-4 py-2 text-right">{item.quantity}</td>
-                          <td className="border border-gray-300 px-4 py-2 text-right">Rs {item.unitPrice.toFixed(2)}</td>
-                          <td className="border border-gray-300 px-4 py-2 text-right">Rs {item.total.toFixed(2)}</td>
+                          <td className="border border-gray-400 px-4 py-2 text-gray-800">{item.name}</td>
+                          <td className="border border-gray-400 px-4 py-2 text-right text-gray-800">{item.quantity}</td>
+                          <td className="border border-gray-400 px-4 py-2 text-right text-gray-800">Rs {item.unitPrice.toFixed(2)}</td>
+                          <td className="border border-gray-400 px-4 py-2 text-right text-gray-800">Rs {item.total.toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -743,25 +877,27 @@ const BillingPage = () => {
                 )}
 
                 {/* Footer */}
-                <div className="text-center text-sm text-gray-500 border-t pt-6">
+                <div className="text-center text-sm text-gray-700 border-t pt-6">
                   <p>Thank you for your business!</p>
                   <p>For any queries, please contact us at info@silekta.lk or +94 11 234 5678</p>
                 </div>
               </div>
               
-              {/* Action Buttons */}
-              <div className="flex space-x-3 mt-6">
+              {/* Action Buttons - Hidden in print */}
+              <div className="flex space-x-3 mt-6 print:hidden">
                 <button
                   onClick={() => window.print()}
-                  className="flex-1 bg-[#0B5351] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#0B5351]/90 transition-colors"
+                  className="flex-1 bg-gradient-to-r from-[#0B5351] to-[#0A4B47] text-white px-4 py-3 rounded-lg font-medium hover:from-[#0A4B47] hover:to-[#083936] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 relative overflow-hidden group"
                 >
-                  Print Invoice
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative z-10">Print Invoice</span>
                 </button>
                 <button
                   onClick={() => setIsPreviewModalOpen(false)}
-                  className="flex-1 bg-gray-300 text-gray-700 px-4 py-3 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+                  className="flex-1 bg-gradient-to-r from-gray-400 to-gray-500 text-white px-4 py-3 rounded-lg font-medium hover:from-gray-500 hover:to-gray-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 relative overflow-hidden group"
                 >
-                  Close
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative z-10">Close</span>
                 </button>
               </div>
             </div>
