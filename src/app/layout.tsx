@@ -1,3 +1,4 @@
+import { OrdersProvider } from "@/context/OrdersContext";
 import React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
@@ -19,8 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={geist.className}>
-        <Providers>{children}</Providers>
+     <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Providers>
+          <OrdersProvider>{children}</OrdersProvider>
+        </Providers>
       </body>
     </html>
   )
