@@ -12,16 +12,16 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart as 
 import { Users, Package, ClipboardList, DollarSign, Truck, PlusSquare, FileText } from "lucide-react";
 
 const StatCard = ({ title, value, hint, icon }: { title: string; value: string | number; hint?: string; icon?: React.ReactNode }) => (
-	<Card className="p-4">
-		<div className="flex items-start gap-3">
-			<div className="p-2 bg-[#f1f8f7] rounded-md text-[#0B5351]">{icon}</div>
-			<div className="flex-1">
-				<div className="text-sm text-gray-500">{title}</div>
-				<div className="mt-2 text-2xl font-semibold text-gray-900">{value}</div>
-				{hint && <div className="mt-1 text-xs text-gray-500">{hint}</div>}
+	<div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 group text-center">
+		<div className="w-12 h-12 bg-[#0B5351] rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+			<div className="text-white">
+				{icon}
 			</div>
 		</div>
-	</Card>
+		<p className="text-sm font-medium text-gray-600 mb-2">{title}</p>
+		<p className="text-2xl font-bold text-gray-900">{value}</p>
+		{hint && <p className="text-xs text-gray-500 mt-1">{hint}</p>}
+	</div>
 );
 
 // Simple in-memory employees placeholder (could come from context/api)
@@ -89,29 +89,35 @@ export default function DashboardPage() {
 		<div className="flex h-screen bg-gray-50 overflow-hidden">
 			<Navbar />
 			<main className="flex-1 overflow-auto">
-				<div className="bg-white border-b border-gray-200 px-6 py-6">
-					<div className="max-w-[1200px] mx-auto flex items-center justify-between gap-4">
-						<div>
-							<h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-							<p className="text-sm text-gray-700">Welcome back — overview of recent activity</p>
-						</div>
-						<div className="flex items-center gap-3">
-							<Link href="/reports" className="inline-flex items-center gap-2 px-4 py-2 bg-[#0B5351] text-white rounded-md hover:bg-[#0B5351]/90">
-								<FileText size={16} /> Generate Report
-							</Link>
+				{/* Main Content */}
+				<div className="flex-1 p-8 overflow-y-auto bg-gradient-to-br from-gray-50 to-gray-100">
+					{/* Clean Header Section */}
+					<div className="mb-6">
+						<div className="text-left mb-4">
+							<h1 className="text-3xl md:text-4xl font-bold text-[#0B5351] mb-2">
+								Dashboard
+							</h1>
+							<p className="text-gray-600">Welcome back — overview of recent business activity</p>
 						</div>
 					</div>
-				</div>
 
-				<div className="p-6">
 					<div className="max-w-[1200px] mx-auto space-y-6">
-						{/* Summary cards */}
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-							<StatCard title="Total Customers" value={totalCustomers} hint="All time" icon={<Users size={20} />} />
-							<StatCard title="Total Orders" value={totalOrders} hint="All time" icon={<ClipboardList size={20} />} />
-							<StatCard title="Inventory Stock" value={inventoryStock} hint="Units in stock" icon={<Package size={20} />} />
-							<StatCard title="Monthly Revenue" value={`Rs ${monthlyRevenue.toFixed(2)}`} hint="This month" icon={<DollarSign size={20} />} />
-							<StatCard title="Pending Shipments" value={pendingShipments} hint="Awaiting dispatch" icon={<Truck size={20} />} />
+						{/* Business Overview */}
+						<div className="bg-gradient-to-r from-green-50 to-emerald-100 rounded-2xl shadow-lg border-2 border-[#0B5351]/20 overflow-hidden mb-8 shadow-[#0B5351]/10">
+							<div className="p-6 border-b border-gray-200">
+								<div className="mb-4 p-3 border-b border-gray-300">
+									<h2 className="text-2xl font-bold text-gray-900">
+										Business Overview
+									</h2>
+								</div>
+								<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+									<StatCard title="Total Customers" value={totalCustomers} hint="All time" icon={<Users size={20} />} />
+									<StatCard title="Total Orders" value={totalOrders} hint="All time" icon={<ClipboardList size={20} />} />
+									<StatCard title="Inventory Stock" value={inventoryStock} hint="Units in stock" icon={<Package size={20} />} />
+									<StatCard title="Monthly Revenue" value={`Rs ${monthlyRevenue.toFixed(2)}`} hint="This month" icon={<DollarSign size={20} />} />
+									<StatCard title="Pending Shipments" value={pendingShipments} hint="Awaiting dispatch" icon={<Truck size={20} />} />
+								</div>
+							</div>
 						</div>
 
 						{/* Charts */}
@@ -201,7 +207,7 @@ export default function DashboardPage() {
 														<td className="p-2 font-medium text-[#0B5351]">{o.id}</td>
 														<td className="p-2">{o.customer}</td>
 														<td className="p-2">{o.date}</td>
-														<td className="p-2"><span className={`inline-flex px-2 py-1 rounded text-xs font-semibold ${o.status === 'Completed' ? 'bg-green-100 text-green-800' : o.status === 'In Progress' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>{o.status}</span></td>
+														<td className="p-2"><span className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${o.status === 'Completed' ? 'bg-green-100 text-green-800' : o.status === 'In Progress' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>{o.status}</span></td>
 														<td className="p-2">Rs {o.total.toFixed(2)}</td>
 													</tr>
 												))}
@@ -274,35 +280,56 @@ export default function DashboardPage() {
 							</Card>
 						</div>
 
-						{/* Quick actions */}
-						<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-							<Card className="p-4">
-								<div className="flex items-center justify-between">
-									<div>
-										<div className="text-sm text-gray-500">Add New Order</div>
-										<div className="mt-1 font-semibold text-gray-900">Create order quickly</div>
-									</div>
-									<button className="inline-flex items-center gap-2 px-3 py-2 bg-[#32ca56] text-white rounded-md"><PlusSquare size={16} /> New</button>
+						{/* Quick Actions */}
+						<div className="bg-gradient-to-r from-green-50 to-emerald-100 rounded-2xl shadow-lg border-2 border-[#0B5351]/20 overflow-hidden mb-8 shadow-[#0B5351]/10">
+							<div className="p-6 border-b border-gray-200">
+								<div className="mb-4 p-3 border-b border-gray-300">
+									<h2 className="text-2xl font-bold text-gray-900">
+										Quick Actions
+									</h2>
 								</div>
-							</Card>
-							<Card className="p-4">
-								<div className="flex items-center justify-between">
-									<div>
-										<div className="text-sm text-gray-500">Add Customer</div>
-										<div className="mt-1 font-semibold text-gray-900">Register new customer</div>
+								<div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+									<div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300">
+										<div className="flex items-center justify-between">
+											<div>
+												<div className="text-sm font-medium text-gray-600 mb-1">Add New Order</div>
+												<div className="text-lg font-bold text-gray-900">Create order quickly</div>
+											</div>
+											<Link href="/orders" className="group bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-4 py-2 rounded-xl font-bold hover:from-emerald-700 hover:to-emerald-800 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 flex items-center space-x-2 relative overflow-hidden">
+												<div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+												<PlusSquare size={16} className="relative z-10" />
+												<span className="relative z-10">New</span>
+											</Link>
+										</div>
 									</div>
-									<button className="inline-flex items-center gap-2 px-3 py-2 bg-[#8CBCB9] text-white rounded-md"><Users size={16} /> Add</button>
-								</div>
-							</Card>
-							<Card className="p-4">
-								<div className="flex items-center justify-between">
-									<div>
-										<div className="text-sm text-gray-500">Generate Report</div>
-										<div className="mt-1 font-semibold text-gray-900">Export CSV / PDF</div>
+									<div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300">
+										<div className="flex items-center justify-between">
+											<div>
+												<div className="text-sm font-medium text-gray-600 mb-1">Add Customer</div>
+												<div className="text-lg font-bold text-gray-900">Register new customer</div>
+											</div>
+											<Link href="/customers" className="group bg-gradient-to-r from-[#8CBCB9] to-[#0B5351] text-white px-4 py-2 rounded-xl font-bold hover:from-[#0B5351] hover:to-[#8CBCB9] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 flex items-center space-x-2 relative overflow-hidden">
+												<div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+												<Users size={16} className="relative z-10" />
+												<span className="relative z-10">Add</span>
+											</Link>
+										</div>
 									</div>
-									<Link href="/reports" className="inline-flex items-center gap-2 px-3 py-2 bg-[#0B5351] text-white rounded-md"><FileText size={16} /> Reports</Link>
+									<div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300">
+										<div className="flex items-center justify-between">
+											<div>
+												<div className="text-sm font-medium text-gray-600 mb-1">Generate Report</div>
+												<div className="text-lg font-bold text-gray-900">Export CSV / PDF</div>
+											</div>
+											<Link href="/reports" className="group bg-gradient-to-r from-[#0B5351] to-[#0A4B47] text-white px-4 py-2 rounded-xl font-bold hover:from-[#0A4B47] hover:to-[#083936] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 flex items-center space-x-2 relative overflow-hidden">
+												<div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+												<FileText size={16} className="relative z-10" />
+												<span className="relative z-10">Reports</span>
+											</Link>
+										</div>
+									</div>
 								</div>
-							</Card>
+							</div>
 						</div>
 					</div>
 				</div>

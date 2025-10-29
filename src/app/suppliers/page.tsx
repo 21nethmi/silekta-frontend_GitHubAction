@@ -187,45 +187,80 @@ const SuppliersPage = () => {
       <Navbar />
       
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex-shrink-0">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Supplier & Purchase Management</h1>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search supplier or purchase..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full sm:w-auto pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0B5351] focus:border-[#0B5351] transition-all duration-200"
-                />
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  🔍
-                </div>
-              </div>
-              <button 
-                onClick={() => setShowAddSupplier(true)}
-                className="bg-[#0B5351] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#0B5351]/90 transition-colors flex items-center justify-center space-x-2"
-              >
-                <span>+</span>
-                <span className="hidden sm:inline">Add Supplier</span>
-                <span className="sm:hidden">Add</span>
-              </button>
-              <button 
-                onClick={() => setShowNewPurchase(true)}
-                className="bg-[#0B5351] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#0B5351]/90 transition-colors flex items-center justify-center space-x-2"
-              >
-                <span>🛒</span>
-                <span className="hidden sm:inline">New Purchase</span>
-                <span className="sm:hidden">Purchase</span>
-              </button>
+        {/* Main Content */}
+        <div className="flex-1 p-8 overflow-y-auto bg-gradient-to-br from-gray-50 to-gray-100">
+          {/* Clean Header Section */}
+          <div className="mb-6">
+            <div className="text-left mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#0B5351] mb-2">
+                Supplier & Purchase Management
+              </h1>
+              <p className="text-gray-600">Manage suppliers and track purchase orders</p>
             </div>
           </div>
-        </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
+          {/* Supplier Management Section */}
+          <div className="bg-gradient-to-r from-green-50 to-emerald-100 rounded-2xl shadow-lg border-2 border-[#0B5351]/20 overflow-hidden mb-8 shadow-[#0B5351]/10">
+            <div className="p-6 border-b">
+              <div className="mb-4 p-3 border-b border-gray-300">
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Manage Suppliers & Purchases
+                </h3>
+              </div>
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                  {/* Add Supplier Button */}
+                  <button 
+                    onClick={() => setShowAddSupplier(true)}
+                    className="group bg-gradient-to-r from-[#0B5351] to-[#0A4B47] text-white px-6 py-3 rounded-xl font-semibold hover:from-[#0A4B47] hover:to-[#083936] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 flex items-center justify-center space-x-2 relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center group-hover:rotate-180 transition-transform duration-300 relative z-10">
+                      <span className="text-lg font-bold">+</span>
+                    </div>
+                    <span className="relative z-10">Add Supplier</span>
+                  </button>
+
+                  {/* New Purchase Button */}
+                  <button 
+                    onClick={() => setShowNewPurchase(true)}
+                    className="group bg-gradient-to-r from-[#8CBCB9] to-[#0B5351] text-white px-6 py-3 rounded-xl font-semibold hover:from-[#0B5351] hover:to-[#8CBCB9] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 flex items-center justify-center space-x-2 relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <span className="relative z-10">🛒</span>
+                    <span className="relative z-10">New Purchase</span>
+                  </button>
+
+                  {/* Search Bar */}
+                  <div className="relative flex-1 sm:w-64">
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-[#0B5351] transition-colors duration-300">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search suppliers..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-10 py-3 text-sm text-gray-900 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0B5351] focus:border-[#0B5351] hover:shadow-md transition-all duration-300"
+                    />
+                    {searchTerm && (
+                      <button
+                        onClick={() => setSearchTerm('')}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500 hover:scale-110 transition-all duration-300"
+                      >
+                        <div className="w-5 h-5 bg-gray-200 hover:bg-red-100 rounded-full flex items-center justify-center">
+                          ✕
+                        </div>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Statistics Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
