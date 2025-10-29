@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
+import { FileText, TrendingUp, Clock, CheckCircle, DollarSign, RotateCcw } from 'lucide-react';
 import {
   searchCustomers,
   getCustomerById,
@@ -276,6 +277,19 @@ const OrdersPage = () => {
     setReturns,
   } = useOrders();
 
+  const getStatusBadgeColor = (status: OrderStatus) => {
+    switch (status) {
+      case 'Completed':
+        return 'bg-green-100 text-green-800';
+      case 'In Progress':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'Cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"All" | OrderStatus>("All");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -447,96 +461,150 @@ const OrdersPage = () => {
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       <Navbar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="bg-white border-b border-gray-200 px-6 py-4 flex-shrink-0">
-          <div className="max-w-[1200px] mx-auto flex items-center justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+        {/* Main Content */}
+        <div className="flex-1 p-8 overflow-y-auto bg-linear-to-br from-gray-50 to-gray-100">
+          {/* Clean Header Section */}
+          <div className="mb-6">
+            <div className="text-left mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#0B5351] mb-2">
                 Order Management
               </h1>
-              <p className="text-sm text-gray-700">
-                Manage customer orders and fulfilment
-              </p>
+              <p className="text-gray-600">Manage customer orders and fulfilment</p>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="bg-gray-50 px-4 py-2 rounded-lg text-sm text-gray-700">
-                <div className="text-xs">Total Orders</div>
-                <div className="text-lg font-bold text-gray-900">
-                  {totalOrders}
-                </div>
+          </div>
+          {/* Order Overview Cards */}
+          <div className="bg-linear-to-r from-green-50 to-emerald-100 rounded-2xl shadow-lg border-2 border-[#0B5351]/20 overflow-hidden mb-8 shadow-[#0B5351]/10">
+            <div className="p-6 border-b border-gray-200">
+              <div className="mb-4 p-3 border-b border-gray-300">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Order Overview
+                </h2>
               </div>
-              <div className="hidden sm:flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    setIsCreateOpen(true);
-                  }}
-                  className="px-4 py-2 bg-[#197b70] text-white rounded-md hover:bg-[#28b44c]"
-                >
-                  Create Order
-                </button>
-                <Link
-                  href="/orders/returns"
-                  className="px-4 py-2 bg-[#bab042] border border-gray-200 rounded-md text-sm text-white hover:bg-[#aac63a]"
-                >
-                  Returns
-                </Link>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Total Orders Card */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-linear-to-r from-[#0B5351] to-[#083936] rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <FileText className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-600 mb-2">Total Orders</p>
+                  <p className="text-2xl font-bold text-gray-900">{totalOrders}</p>
+                </div>
+
+                {/* In Progress Card */}
+                <div className="bg-linear-to-br from-yellow-50 to-amber-50 p-6 rounded-xl shadow-sm border border-yellow-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-linear-to-r from-yellow-800 to-amber-600 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <Clock className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-yellow-700 mb-2">In Progress</p>
+                  <p className="text-2xl font-bold text-yellow-800">{inProgressCount}</p>
+                </div>
+
+                {/* Completed Card */}
+                <div className="bg-linear-to-br from-green-50 to-emerald-50 p-6 rounded-xl shadow-sm border border-green-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-linear-to-r from-green-500 to-emerald-900 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <CheckCircle className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-green-700 mb-2">Completed</p>
+                  <p className="text-2xl font-bold text-green-800">{completedCount}</p>
+                </div>
+
+                {/* Total Revenue Card */}
+                <div className="bg-linear-to-br from-blue-50 to-indigo-50 p-6 rounded-xl shadow-sm border border-blue-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-linear-to-r from-blue-500 to-indigo-900 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <DollarSign className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-blue-700 mb-2">Total Revenue</p>
+                  <p className="text-2xl font-bold text-blue-800">Rs {orders.filter(o => o.status === 'Completed').reduce((sum, o) => sum + o.total, 0).toFixed(2)}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex-1 p-6 overflow-y-auto">
-          <div className="max-w-[1200px] mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                <div className="text-sm text-gray-700">Total Orders</div>
-                <div className="text-2xl font-bold text-gray-900">
-                  {totalOrders}
-                </div>
+          {/* Order Management Section */}
+          <div className="bg-linear-to-r from-green-50 to-emerald-100 rounded-2xl shadow-lg border-2 border-[#0B5351]/20 overflow-hidden mb-8 shadow-[#0B5351]/10">
+            <div className="p-6 border-b">
+              <div className="mb-4 p-3 border-b border-gray-300">
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Manage Orders
+                </h3>
               </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                <div className="text-sm text-gray-700">In Progress</div>
-                <div className="text-2xl font-bold text-amber-600">
-                  {inProgressCount}
-                </div>
-              </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                <div className="text-sm text-gray-700">Completed</div>
-                <div className="text-2xl font-bold text-emerald-600">
-                  {completedCount}
-                </div>
-              </div>
-            </div>
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                  {/* Create Order Button */}
+                  <button 
+                    onClick={() => setIsCreateOpen(true)}
+                    className="group bg-linear-to-r from-[#0B5351] to-[#0A4B47] text-white px-6 py-3 rounded-xl font-semibold hover:from-[#0A4B47] hover:to-[#083936] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 flex items-center justify-center space-x-2 relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-linear-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center group-hover:rotate-180 transition-transform duration-300 relative z-10">
+                      <span className="text-lg font-bold">+</span>
+                    </div>
+                    <span className="relative z-10">Create Order</span>
+                  </button>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-              <div className="flex items-center gap-3 w-full sm:w-auto">
-                <input
-                  type="text"
-                  placeholder="Search by order id or customer..."
-                  className="px-4 py-2 border text-gray-700 border-gray-300 rounded-lg w-full sm:w-72 focus:ring-2 focus:ring-[#0B5351]"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value as any)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg text-gray-700"
-                >
-                  <option value="All">All Statuses</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => {
-                    setSearch("");
-                    setStatusFilter("All");
-                  }}
-                  className="px-4 py-2 rounded-lg text-black bg-gray-400 hover:bg-gray-300"
-                >
-                  Reset Filter
-                </button>
+                  {/* Returns Button */}
+                  <Link
+                    href="/orders/returns"
+                    className="group bg-linear-to-r from-[#8CBCB9] to-[#0B5351] text-white px-6 py-3 rounded-xl font-semibold hover:from-[#0B5351] hover:to-[#8CBCB9] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 flex items-center justify-center space-x-2 relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-linear-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <RotateCcw className="w-4 h-4 relative z-10" />
+                    <span className="relative z-10">Returns</span>
+                  </Link>
+
+                  {/* Search Bar */}
+                  <div className="relative flex-1 sm:w-64">
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-[#0B5351] transition-colors duration-300">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search orders..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      className="w-full pl-10 pr-10 py-3 text-sm text-gray-900 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0B5351] focus:border-[#0B5351] hover:shadow-md transition-all duration-300"
+                    />
+                    {search && (
+                      <button
+                        onClick={() => setSearch('')}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500 hover:scale-110 transition-all duration-300"
+                      >
+                        <div className="w-5 h-5 bg-gray-200 hover:bg-red-100 rounded-full flex items-center justify-center">
+                          ✕
+                        </div>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Status Filter */}
+                  <div className="flex bg-gray-100 rounded-xl border border-gray-200 p-1 shadow-sm">
+                    <select
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value as any)}
+                      className="px-4 py-2 bg-transparent border-none text-sm font-medium text-gray-700 focus:outline-none"
+                    >
+                      <option value="All">All Status</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Completed">Completed</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                  </div>
+
+                  {/* Reset Button */}
+                  <button
+                    onClick={() => {
+                      setSearch("");
+                      setStatusFilter("All");
+                    }}
+                    className="group bg-linear-to-r from-gray-400 to-gray-500 text-white px-4 py-3 rounded-xl font-medium hover:from-gray-500 hover:to-gray-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-linear-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <span className="relative z-10">Reset</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -620,13 +688,7 @@ const OrdersPage = () => {
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap text-center">
                           <span
-                            className={`inline-flex px-3 py-1 text-sm font-semibold rounded ${
-                              o.status === "In Progress"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : o.status === "Completed"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
-                            }`}
+                            className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(o.status)}`}
                           >
                             {o.status}
                           </span>

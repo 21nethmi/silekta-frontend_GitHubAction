@@ -1,16 +1,32 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
-import { getCurrentUser } from "@/lib/mockAuth";
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { 
+  ChevronDown, 
+  ChevronRight, 
+  LayoutDashboard,
+  Users,
+  ShoppingCart,
+  Truck,
+  Package,
+  Factory,
+  UserCheck,
+  Receipt,
+  BarChart3,
+  LogOut,
+  Sparkles,
+  Home
+} from 'lucide-react';
+import { getCurrentUser } from '@/lib/mockAuth';
 
-// Define types for navigation items
+// Define NavItem type
 type NavItem = {
   name: string;
   href?: string;
+  icon?: any;
   children?: { name: string; href: string }[];
 };
 
@@ -21,6 +37,8 @@ const Navbar = () => {
 
   // Track which dropdown is open
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  // Track navbar collapse state
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Check user role on mount
   useEffect(() => {
@@ -30,34 +48,36 @@ const Navbar = () => {
     }
   }, []);
 
-  // Define navigation structure for ADMIN
+  // Define navigation structure for ADMIN (all routes)
   const adminNavItems: NavItem[] = [
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Customer Management", href: "/customers" },
-    { name: "Order Management", href: "/orders" },
-    { name: "Supplier & Purchase", href: "/suppliers" },
-    { name: "Inventory Management", href: "/inventory" },
-    { name: "Production Management", href: "/production" },
+    {name: 'Home', href: '/home', icon: Home },
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Customer Management', href: '/customers', icon: Users },
+    { name: 'Order Management', href: '/orders', icon: ShoppingCart },
+    { name: 'Supplier & Purchase', href: '/suppliers', icon: Truck },
+    { name: 'Inventory Management', href: '/inventory', icon: Package },
+    { name: 'Production Management', href: '/production', icon: Factory },
     {
-      name: "Employee Management",
+      name: 'Employee Management',
+      icon: UserCheck,
       children: [
-        { name: "Employee List", href: "/employee" },
-        { name: "Payroll", href: "/payroll" },
+        { name: 'Employee List', href: '/employee' },
+        { name: 'Payroll', href: '/payroll' },
       ],
     },
-    { name: "Billing & Invoice", href: "/billing" },
-    { name: "Report & Analytics", href: "/reports" },
+    { name: 'Billing & Invoice', href: '/billing', icon: Receipt },
+    { name: 'Report & Analytics', href: '/reports', icon: BarChart3 },
   ];
 
   // Define navigation structure for EMPLOYEE (no Dashboard, Employee Management, Payroll, or Reports)
   const employeeNavItems: NavItem[] = [
-    { name: "Home", href: "/home" },
-    { name: "Customer Management", href: "/customers" },
-    { name: "Order Management", href: "/orders" },
-    { name: "Supplier & Purchase", href: "/suppliers" },
-    { name: "Inventory Management", href: "/inventory" },
-    { name: "Production Management", href: "/production" },
-    { name: "Billing & Invoice", href: "/billing" },
+    { name: "Home", href: "/home", icon: Home },
+    { name: "Customer Management", href: "/customers", icon: Users },
+    { name: "Order Management", href: "/orders", icon: ShoppingCart },
+    { name: "Supplier & Purchase", href: "/suppliers", icon: Truck },
+    { name: "Inventory Management", href: "/inventory", icon: Package },
+    { name: "Production Management", href: "/production", icon: Factory },
+    { name: "Billing & Invoice", href: "/billing", icon: Receipt },
   ];
 
   // Select navigation items based on role
@@ -78,91 +98,158 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-64 bg-[#0B5351] flex flex-col min-h-screen">
+    <div className={`${isCollapsed ? 'w-20' : 'w-80'} bg-gradient-to-b from-[#0B5351] to-[#083936] flex flex-col min-h-screen shadow-2xl relative transition-all duration-300 ease-in-out`}>
+      {/* Background Decoration */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0B5351]/30 via-[#083936]/20 to-[#0B5351]/15 pointer-events-none"></div>
+      
       {/* Logo */}
-      <div className="p-6 border-b border-[#0B5351]/20">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-white/20 rounded flex items-center justify-center">
-
-            <Image
-              src="/Logo (2).png"
-              alt="Silekta Logo"
-              width={24}
-              height={24}
-              className="w-6 h-6"
-            />
+      <div className="p-8 border-b border-white/10 relative">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4 group cursor-pointer">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#8CBCB9]/50 to-[#0B5351]/30 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm border border-[#8CBCB9]/40">
+              <Image
+                src="/Logo (2).png"
+                alt="Silekta Logo"
+                width={28}
+                height={28}
+                className="w-7 h-7 drop-shadow-md"
+              />
+            </div>
+            {!isCollapsed && (
+              <div className="flex flex-col">
+                <span className="text-white text-xl font-bold tracking-wide drop-shadow-md">Silekta</span>
+                <div className="flex items-center space-x-1 text-xs text-white/70">
+                  <Sparkles size={12} className="animate-pulse" />
+                  <span>Management System</span>
+                </div>
+              </div>
+            )}
           </div>
-          <span className="text-white text-xl font-semibold">Silekta</span>
+          {/* Toggle Button */}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-all duration-200"
+          >
+            <ChevronRight 
+              className={`w-5 h-5 transition-transform duration-300 ${isCollapsed ? 'rotate-0' : 'rotate-180'}`}
+            />
+          </button>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-4 py-6">
-        <ul className="space-y-2">
-          {navItems.map((item) => (
-            <li key={item.name}>
-              {item.children ? (
-                <>
-                  <button
-                    onClick={() => toggleDropdown(item.name)}
-                    className="w-full flex justify-between items-center px-4 py-3 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-colors"
-                  >
-                    <span className="text-sm font-medium">{item.name}</span>
-                    {openDropdown === item.name ? (
-                      <ChevronDown size={16} />
-                    ) : (
-                      <ChevronRight size={16} />
-                    )}
-                  </button>
+      <nav className="flex-1 px-4 py-8 relative overflow-y-auto">
+        <ul className="space-y-3">
+          {navItems.map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <li key={item.name}>
+                {item.children ? (
+                  <>
+                    <button
+                      onClick={() => !isCollapsed && toggleDropdown(item.name)}
+                      className={`w-full flex ${isCollapsed ? 'justify-center' : 'justify-between'} items-center px-5 py-4 rounded-xl text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300 group hover:shadow-lg hover:scale-[1.02] relative overflow-hidden`}
+                      title={isCollapsed ? item.name : ''}
+                    >
+                      <div className="flex items-center space-x-4">
+                        {IconComponent && (
+                          <IconComponent 
+                            size={20} 
+                            className="group-hover:scale-110 transition-transform duration-300 drop-shadow-md" 
+                          />
+                        )}
+                        {!isCollapsed && <span className="text-base font-medium">{item.name}</span>}
+                      </div>
+                      {!isCollapsed && (
+                        <div className="transition-transform duration-300">
+                          {openDropdown === item.name ? (
+                            <ChevronDown size={16} className="rotate-0" />
+                          ) : (
+                            <ChevronRight size={16} className="group-hover:translate-x-1" />
+                          )}
+                        </div>
+                      )}
+                      {/* Hover gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#8CBCB9]/20 to-[#0B5351]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </button>
 
-                  {/* Dropdown children */}
-                  {openDropdown === item.name && (
-                    <ul className="ml-6 mt-1 space-y-1">
-                      {item.children.map((child) => (
-                        <li key={child.name}>
-                          <Link
-                            href={child.href}
-                            className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
-                              pathname === child.href
-                                ? "bg-white/20 text-white"
-                                : "text-white/70 hover:bg-white/10 hover:text-white"
-                            }`}
-                          >
-                            {child.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </>
-              ) : (
-                item.href && (
+                    {/* Dropdown children with smooth animation */}
+                    {!isCollapsed && (
+                      <div className={`overflow-hidden transition-all duration-300 ${
+                        openDropdown === item.name ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+                      }`}>
+                        <ul className="ml-6 mt-3 space-y-2 pl-4 border-l border-white/10">
+                          {item.children.map((child) => (
+                            <li key={child.name}>
+                              <Link
+                                href={child.href}
+                                className={`block px-4 py-3 rounded-lg text-sm transition-all duration-300 group hover:translate-x-1 ${
+                                  pathname === child.href
+                                    ? 'bg-white/20 text-white shadow-md border border-white/10'
+                                    : 'text-white/70 hover:bg-white/10 hover:text-white'
+                                }`}
+                              >
+                                <span className="flex items-center space-x-2">
+                                  <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                                    pathname === child.href ? 'bg-white' : 'bg-white/30'
+                                  }`}></div>
+                                  <span>{child.name}</span>
+                                </span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </>
+                ) : (
                   <Link
                     href={item.href}
-                    className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+                    className={`flex items-center ${isCollapsed ? 'justify-center' : ''} px-5 py-4 rounded-xl transition-all duration-300 group hover:shadow-lg hover:scale-[1.02] relative overflow-hidden ${
                       pathname === item.href
-                        ? "bg-white/20 text-white"
-                        : "text-white/80 hover:bg-white/10 hover:text-white"
+                        ? 'bg-gradient-to-r from-[#8CBCB9]/40 to-[#0B5351]/25 text-white shadow-md border border-[#8CBCB9]/30'
+                        : 'text-white/80 hover:bg-white/10 hover:text-white'
                     }`}
+                    title={isCollapsed ? item.name : ''}
                   >
-                    <span className="text-sm font-medium">{item.name}</span>
+                    <div className="flex items-center space-x-4">
+                      {IconComponent && (
+                        <IconComponent 
+                          size={20} 
+                          className="group-hover:scale-110 transition-transform duration-300 drop-shadow-md" 
+                        />
+                      )}
+                      {!isCollapsed && <span className="text-base font-medium">{item.name}</span>}
+                    </div>
+                    {/* Active indicator */}
+                    {pathname === item.href && !isCollapsed && (
+                      <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                        <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                      </div>
+                    )}
+                    {/* Hover gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#8CBCB9]/20 to-[#0B5351]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </Link>
-                )
-              )}
-            </li>
-          ))}
+                )}
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
       {/* Logout Button */}
-      <div className="p-4 border-t border-[#0B5351]/20">
+      <div className="p-6 border-t border-white/10 relative">
         <button 
           onClick={handleLogout}
-          className="w-full bg-[#DE8080] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#DE8080]/90 transition-colors"
+          className="w-full bg-gradient-to-r from-[#DE8080] to-[#E09090] text-white px-5 py-4 rounded-xl font-medium hover:from-[#E09090] hover:to-[#DE8080] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:shadow-md active:translate-y-0.5 flex items-center justify-center space-x-3 group relative overflow-hidden"
+          title={isCollapsed ? 'Logout' : ''}
         >
-          Logout
+          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <LogOut size={18} className="group-hover:rotate-12 transition-transform duration-300 relative z-10" />
+          {!isCollapsed && <span className="relative z-10">Logout</span>}
         </button>
       </div>
+      
     </div>
   );
 };

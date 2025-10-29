@@ -14,9 +14,11 @@ interface Employee {
 
 export default function EmployeePage() {
   const router = useRouter();
+
   const [employees, setEmployees] = useState<Employee[]>([
     { id: 1, name: 'John Doe', status: 'Active' },
   ]);
+
   const [newEmployee, setNewEmployee] = useState('');
   const [status, setStatus] = useState<'Active' | 'Inactive'>('Active');
   const [showForm, setShowForm] = useState(false);
@@ -55,24 +57,44 @@ export default function EmployeePage() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
       <Navbar />
 
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-gray-800">Employee</h1>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Main Content */}
+        <div className="flex-1 p-8 overflow-y-auto bg-gradient-to-br from-gray-50 to-gray-100">
+          {/* Clean Header Section */}
+          <div className="mb-6">
+            <div className="text-left mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#0B5351] mb-2">
+                Employee Management
+              </h1>
+              <p className="text-gray-600">Manage your team and workforce</p>
+            </div>
+          </div>
 
-          <button
-            onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 bg-[#0B5351] text-white px-4 py-2 rounded-md text-sm hover:bg-[#0B5351]/90 transition"
-          >
-            <Plus className="w-4 h-4" /> Add Employee
-          </button>
-        </div>
+          {/* Employee Management Section */}
+          <div className="bg-gradient-to-r from-green-50 to-emerald-100 rounded-2xl shadow-lg border-2 border-[#0B5351]/20 overflow-hidden mb-8 shadow-[#0B5351]/10">
+            <div className="p-6 border-b">
+              <div className="mb-4 p-3 border-b border-gray-300">
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Manage Employees
+                </h3>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="group bg-gradient-to-r from-[#0B5351] to-[#0A4B47] text-white px-6 py-3 rounded-xl font-semibold hover:from-[#0A4B47] hover:to-[#083936] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 flex items-center justify-center space-x-2 relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <Plus className="w-4 h-4 relative z-10" />
+                  <span className="relative z-10">Add Employee</span>
+                </button>
+              </div>
+            </div>
 
-        {/* Employee List */}
-        <div className="p-6">
+            {/* Employee List */}
+            <div className="p-6">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
             <thead className="bg-gray-50">
               <tr>
@@ -132,7 +154,7 @@ export default function EmployeePage() {
 
               <div className="mb-4">
                 <label className="block text-sm text-gray-600 mb-1">Status</label>
-                <select
+                <select 
                   value={status}
                   onChange={(e) => setStatus(e.target.value as 'Active' | 'Inactive')}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0B5351]"
@@ -160,6 +182,8 @@ export default function EmployeePage() {
           </div>
         )}
       </div>
+    </div>
+    </div>
     </div>
   );
 }

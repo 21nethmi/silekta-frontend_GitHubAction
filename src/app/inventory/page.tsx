@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
+import { Package, AlertTriangle, FileText } from 'lucide-react';
 
 interface InventoryItem {
   id: string;
@@ -195,205 +196,317 @@ const InventoryPage = () => {
       <Navbar />
       
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4 flex-shrink-0">
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-          </div>
-        </div>
-
         {/* Main Content */}
-        <div className="flex-1 p-6 overflow-y-auto">
-          {/* Centered Header Section */}
-          <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Inventory Management</h1>
-            <p className="text-gray-600">Manage your raw materials and production supplies</p>
-          </div>
-
-          {/* Centered Alert Buttons and Create Button */}
-          <div className="flex flex-col items-center space-y-3 mb-6">
-            {/* Alert Buttons Row */}
-            <div className="flex gap-4 justify-center">
-              <button 
-                onClick={() => setSearchTerm('')}
-                className="bg-[#DE8080] text-white px-6 py-3 rounded-lg flex items-center space-x-2 hover:bg-[#DE8080]/90 transition-all duration-200 shadow-md"
-              >
-                <div className="text-left">
-                  <div className="font-semibold">Low Stock Alerts</div>
-                  <div className="text-xs opacity-90">{lowStockItems.length} items need attention</div>
-                </div>
-              </button>
-              
-              <button 
-                onClick={() => setSearchTerm('')}
-                className="bg-[#80DED9] text-white px-6 py-3 rounded-lg flex items-center space-x-2 hover:bg-[#80DED9]/90 transition-all duration-200 shadow-md"
-              >
-                <div className="text-left">
-                  <div className="font-semibold">Recently Refilled</div>
-                  <div className="text-xs opacity-90">{recentlyRefilledItems.length} items updated</div>
-                </div>
-              </button>
+        <div className="flex-1 p-8 overflow-y-auto bg-gradient-to-br from-gray-50 to-gray-100">
+          {/* Clean Header Section */}
+          <div className="mb-6">
+            <div className="text-left mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#0B5351] mb-2">
+                Inventory Management
+              </h1>
+              <p className="text-gray-600">Manage your raw materials and production supplies</p>
             </div>
-
-            {/* Create Button */}
-            <button 
-              onClick={handleAddClick}
-              className="bg-[#8CBCB9] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#8CBCB9]/90 transition-all duration-200 shadow-md flex items-center space-x-2"
-            >
-              <span className="text-xl">+</span>
-              <span>Add New Inventory Item</span>
-            </button>
           </div>
 
-          {/* Centered Search and Filter Section */}
-          <div className="flex flex-col items-center space-y-4 mb-6">
-            {/* Search Bar */}
-            <div className="w-full max-w-2xl">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search by name or supplier..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-3 text-base text-gray-900 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0B5351] focus:border-[#0B5351] transition-all duration-200 shadow-sm placeholder-gray-600"
-                />
-                {searchTerm && (
-                  <button
-                    onClick={() => setSearchTerm('')}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          {/* Inventory Overview Cards */}
+          <div className="bg-gradient-to-r from-green-50 to-emerald-100 rounded-2xl shadow-lg border-2 border-[#0B5351]/20 overflow-hidden mb-8 shadow-[#0B5351]/10">
+            <div className="p-6 border-b border-gray-200">
+              <div className="mb-4 p-3 border-b border-gray-300">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Inventory Overview
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Low Stock Alert Card */}
+                <div className="bg-linear-to-br from-red-50 to-rose-100 p-6 rounded-xl shadow-sm border border-red-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-linear-to-r from-red-500 to-rose-900 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <AlertTriangle className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-red-700 mb-2">Low Stock Alerts</p>
+                  <p className="text-2xl font-bold text-red-800">{lowStockItems.length}</p>
+                  <p className="text-xs text-red-600 mt-1">items need attention</p>
+                </div>
+
+                {/* Recently Updated Card */}
+                <div className="bg-linear-to-br from-blue-50 to-indigo-50 p-6 rounded-xl shadow-sm border border-blue-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-linear-to-r from-blue-500 to-indigo-900 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <Package className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-blue-700 mb-2">Recently Updated</p>
+                  <p className="text-2xl font-bold text-blue-800">{recentlyRefilledItems.length}</p>
+                  <p className="text-xs text-blue-600 mt-1">items this week</p>
+                </div>
+
+                {/* Total Items Card */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 group text-center">
+                  <div className="w-12 h-12 bg-linear-to-r from-[#0B5351] to-[#083936] rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform duration-300">
+                    <FileText className="text-white w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-600 mb-2">Total Items</p>
+                  <p className="text-2xl font-bold text-gray-900">{inventoryData.length}</p>
+                  <p className="text-xs text-gray-500 mt-1">in inventory</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Inventory Management Section */}
+          <div className="bg-gradient-to-r from-green-50 to-emerald-100 rounded-2xl shadow-lg border-2 border-[#0B5351]/20 overflow-hidden mb-8 shadow-[#0B5351]/10">
+            <div className="p-6 border-b">
+              <div className="mb-4 p-3 border-b border-gray-300">
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Manage Inventory
+                </h3>
+              </div>
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                  {/* Create Item Button */}
+                  <button 
+                    onClick={handleAddClick}
+                    className="group bg-gradient-to-r from-[#0B5351] to-[#0A4B47] text-white px-6 py-3 rounded-xl font-semibold hover:from-[#0A4B47] hover:to-[#083936] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 flex items-center justify-center space-x-2 relative overflow-hidden"
                   >
-                    ✕
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center group-hover:rotate-180 transition-transform duration-300 relative z-10">
+                      <span className="text-lg font-bold">+</span>
+                    </div>
+                    <span className="relative z-10">Add New Item</span>
                   </button>
-                )}
+
+                  {/* Search Bar */}
+                  <div className="relative flex-1 sm:w-64">
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-[#0B5351] transition-colors duration-300">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search inventory..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-10 py-3 text-sm text-gray-900 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#0B5351] focus:border-[#0B5351] hover:shadow-md transition-all duration-300"
+                    />
+                    {searchTerm && (
+                      <button
+                        onClick={() => setSearchTerm('')}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500 hover:scale-110 transition-all duration-300"
+                      >
+                        <div className="w-5 h-5 bg-gray-200 hover:bg-red-100 rounded-full flex items-center justify-center">
+                          ✕
+                        </div>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Category Filter */}
+                  <div className="flex bg-gray-100 rounded-xl border border-gray-200 p-1 shadow-sm">
+                    <button
+                      onClick={() => setActiveTab('printing')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative overflow-hidden group ${
+                        activeTab === 'printing'
+                          ? 'bg-gradient-to-r from-[#0B5351] to-[#0A4B47] text-white transform scale-105 shadow-lg'
+                          : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 hover:text-[#0B5351] hover:shadow-md'
+                      }`}
+                    >
+                      {activeTab === 'printing' && <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>}
+                      <span className="relative z-10">Printing</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('production')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative overflow-hidden group ${
+                        activeTab === 'production'
+                          ? 'bg-gradient-to-r from-[#0B5351] to-[#0A4B47] text-white transform scale-105 shadow-lg'
+                          : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 hover:text-[#0B5351] hover:shadow-md'
+                      }`}
+                    >
+                      {activeTab === 'production' && <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>}
+                      <span className="relative z-10">Production</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Category Filter */}
-            <div className="bg-gray-100 rounded-lg p-1 flex shadow-sm">
-              <button
-                onClick={() => setActiveTab('printing')}
-                className={`px-6 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
-                  activeTab === 'printing'
-                    ? 'bg-white text-[#0B5351] shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                }`}
-              >
-                Printing Materials
-              </button>
-              <button
-                onClick={() => setActiveTab('production')}
-                className={`px-6 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
-                  activeTab === 'production'
-                    ? 'bg-white text-[#0B5351] shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                }`}
-              >
-                Production Materials
-              </button>
-            </div>
-          </div>
-
-          {/* Inventory Table */}
-          <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-            <div className="px-4 py-3 bg-white border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-800">
-                {activeTab === 'printing' ? 'Printing Materials' : 'Production Materials'} 
-                <span className="ml-2 text-sm text-gray-500">({filteredData.length} items)</span>
-              </h3>
-            </div>
-            <div className="overflow-x-auto max-h-96">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      ID
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Name
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Stock
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Supplier
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Price
-                    </th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredData.map((item) => (
-                    <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-200 bg-white">
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[#0B5351]/10 text-[#0B5351]">
-                          {item.id}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                        <div className="text-xs text-gray-500">{item.lastUpdated}</div>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded ${
-                          item.stock < 10 
-                            ? 'bg-red-100 text-red-800' 
-                            : item.stock < 25 
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-green-100 text-green-800'
-                        }`}>
-                          {item.stock}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                        {item.supplierName}
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                        <span className="font-semibold">Rs {item.unitPrice.toFixed(2)}</span>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-center">
-                        <div className="flex justify-center space-x-2">
-                          <button 
-                            onClick={() => handleEditClick(item)}
-                            className="bg-[#0B5351] text-white px-3 py-1 rounded text-xs font-medium hover:bg-[#0B5351]/90 transition-colors"
-                          >
-                            Edit
-                          </button>
-                          <button 
-                            onClick={() => handleDeleteClick(item)}
-                            className="bg-red-500 text-white px-3 py-1 rounded text-xs font-medium hover:bg-red-600 transition-colors"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            {/* Inventory Table Section */}
+            <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl shadow-sm border border-gray-200">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="overflow-x-auto max-h-[500px] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                  <table className="w-full">
+                    <thead className="bg-gradient-to-r from-[#0B5351] to-[#0A4B47] sticky top-0">
+                      <tr>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
+                          <div className="flex items-center space-x-1">
+                            <span>ID</span>
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3z"></path>
+                            </svg>
+                          </div>
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
+                          <div className="flex items-center space-x-1">
+                            <span>Item Name</span>
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                          </div>
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Stock</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Supplier</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Unit Price</th>
+                        <th className="px-6 py-4 text-center text-xs font-bold text-white uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-100">
+                      {filteredData.map((item, index) => (
+                        <tr key={item.id} className="group cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-300"
+                          style={{ animationDelay: `${index * 50}ms` }}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-1 h-8 bg-[#0B5351] rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-110"></div>
+                              <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0B5351]/10 text-[#0B5351] border border-[#0B5351]/20 group-hover:scale-105 group-hover:bg-[#0B5351]/20 transition-all duration-300">
+                                {item.id}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-10 h-10 bg-[#0B5351]/10 rounded-full flex items-center justify-center group-hover:bg-[#0B5351]/20 group-hover:scale-110 transition-all duration-300">
+                                <span className="text-sm font-bold text-[#0B5351] group-hover:text-[#0A4B47] transition-colors duration-300">
+                                  {item.name.charAt(0)}
+                                </span>
+                              </div>
+                              <div>
+                                <div className="text-sm font-bold text-gray-900 group-hover:text-[#0B5351] transition-colors duration-300">
+                                  {item.name}
+                                </div>
+                                <div className="text-xs text-gray-500 group-hover:text-gray-600">
+                                  Updated: {item.lastUpdated}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold border capitalize ${
+                              item.stock < 10 
+                                ? 'bg-red-100 text-[#0B5351] border-red-300'
+                                : item.stock < 25
+                                ? 'bg-yellow-100 text-[#0B5351] border-yellow-300'
+                                : 'bg-green-100 text-[#0B5351] border-green-300'
+                            } shadow-md`}>
+                              <div className={`w-2 h-2 rounded-full mr-2 ${
+                                item.stock < 10 ? 'bg-red-500 animate-pulse' : 
+                                item.stock < 25 ? 'bg-yellow-500' : 'bg-green-500'
+                              }`}></div>
+                              {item.stock}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                            <div className="flex items-center space-x-2">
+                              <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                              <span>{item.supplierName}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="text-lg font-bold text-gray-900 group-hover:text-[#0B5351] transition-all duration-300 group-hover:scale-105">
+                              Rs {item.unitPrice.toFixed(2)}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-center">
+                            <div className="flex justify-center items-center space-x-3 min-h-[40px]">
+                              <button 
+                                onClick={() => handleEditClick(item)}
+                                className="group bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold hover:from-emerald-700 hover:to-emerald-800 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 transform flex items-center space-x-2 relative overflow-hidden"
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <svg className="w-3 h-3 group-hover:rotate-12 transition-transform duration-300 relative z-10" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                                </svg>
+                                <span className="relative z-10">Edit</span>
+                              </button>
+                              
+                              <button 
+                                onClick={() => handleDeleteClick(item)}
+                                className="group bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-xl text-xs font-bold hover:from-red-700 hover:to-red-800 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md active:translate-y-0.5 transform flex items-center space-x-2 relative overflow-hidden"
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <svg className="w-3 h-3 group-hover:rotate-12 transition-transform duration-300 relative z-10" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"/>
+                                </svg>
+                                <span className="relative z-10">Delete</span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
 
           {filteredData.length === 0 && (
-            <div className="text-center py-16">
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No items found</h3>
-              <p className="text-gray-500 mb-6">
-                {searchTerm 
-                  ? `No items match "${searchTerm}" in ${activeTab} materials`
-                  : `No ${activeTab} materials available`
-                }
-              </p>
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm('')}
-                  className="bg-[#0B5351] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#0B5351]/90 transition-colors"
-                >
-                  Clear Search
-                </button>
-              )}
+            <div className="bg-white rounded-2xl border-2 border-dashed border-gray-300 py-20 text-center relative overflow-hidden shadow-sm">
+              {/* Background decoration */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0B5351]/5 via-transparent to-[#8CBCB9]/5"></div>
+              
+              <div className="relative z-10">
+                {/* Icon */}
+                <div className="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                  <svg className="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M9 21h6M15 21v-7m-6 7v-7"></path>
+                  </svg>
+                </div>
+                
+                <h3 className="text-2xl font-bold text-gray-700 mb-4">No inventory items found</h3>
+                <p className="text-gray-500 mb-8 max-w-md mx-auto leading-relaxed">
+                  {searchTerm 
+                    ? (
+                      <>
+                        No items match <span className="font-semibold text-[#0B5351]">"{searchTerm}"</span> in <span className="font-semibold">{activeTab}</span> materials
+                      </>
+                    )
+                    : `No ${activeTab} materials available yet. Add your first item to get started.`
+                  }
+                </p>
+                
+                <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+                  {searchTerm ? (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="bg-gradient-to-r from-[#0B5351] to-[#8CBCB9] text-white px-8 py-3 rounded-xl font-bold hover:from-[#8CBCB9] hover:to-[#0B5351] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 flex items-center space-x-2 relative overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <svg className="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
+                      <span className="relative z-10">Clear Search</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleAddClick}
+                      className="bg-gradient-to-r from-[#8CBCB9] to-[#0B5351] text-white px-8 py-3 rounded-xl font-bold hover:from-[#0B5351] hover:to-[#8CBCB9] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 flex items-center space-x-2 relative overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center relative z-10">
+                        <span className="text-sm font-bold">+</span>
+                      </div>
+                      <span className="relative z-10">Add Your First Item</span>
+                    </button>
+                  )}
+                  
+                  <button
+                    onClick={() => setActiveTab(activeTab === 'printing' ? 'production' : 'printing')}
+                    className="text-[#0B5351] font-semibold hover:text-[#8CBCB9] transition-colors duration-300 flex items-center space-x-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                    </svg>
+                    <span>Switch to {activeTab === 'printing' ? 'Production' : 'Printing'}</span>
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -402,12 +515,16 @@ const InventoryPage = () => {
       {/* Add/Edit Modal */}
       {(isAddModalOpen || isEditModalOpen) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              {isAddModalOpen ? 'Add New Item' : 'Edit Item'}
-            </h2>
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50 rounded-t-xl">
+              <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-l-4 border-[#0B5351]">
+                <h2 className="text-2xl font-bold text-gray-900">{isAddModalOpen ? 'Add New Item' : 'Edit Item'}</h2>
+              </div>
+            </div>
             
-            <div className="space-y-4">
+            <div className="p-6">
+              <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
                 <input
@@ -464,23 +581,26 @@ const InventoryPage = () => {
               )}
             </div>
             
-            <div className="flex space-x-3 mt-6">
-              <button
-                onClick={handleSave}
-                className="flex-1 bg-[#8CBCB9] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#8CBCB9]/90 transition-colors"
-              >
-                Save
-              </button>
-              <button
-                onClick={() => {
-                  setIsAddModalOpen(false);
-                  setIsEditModalOpen(false);
-                  setFormData({ name: '', stock: 0, supplierName: '', unitPrice: 0, category: 'printing' });
-                }}
-                className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-400 transition-colors"
-              >
-                Cancel
-              </button>
+              <div className="flex space-x-3 mt-6">
+                <button
+                  onClick={handleSave}
+                  className="flex-1 bg-gradient-to-r from-[#8CBCB9] to-[#0B5351] text-white px-4 py-3 rounded-lg font-medium hover:from-[#0B5351] hover:to-[#8CBCB9] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative z-10">Save Item</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setIsAddModalOpen(false);
+                    setIsEditModalOpen(false);
+                    setFormData({ name: '', stock: 0, supplierName: '', unitPrice: 0, category: 'printing' });
+                  }}
+                  className="flex-1 bg-gradient-to-r from-gray-400 to-gray-500 text-white px-4 py-3 rounded-lg font-medium hover:from-gray-500 hover:to-gray-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative z-10">Cancel</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -489,28 +609,38 @@ const InventoryPage = () => {
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Confirm Deletion</h2>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete <span className="font-semibold">{selectedItem?.name}</span>? This action cannot be undone.
-            </p>
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-red-50 to-rose-50 rounded-t-xl">
+              <div className="p-3 bg-gradient-to-r from-red-50 to-rose-50 rounded-lg border-l-4 border-red-500">
+                <h2 className="text-2xl font-bold text-gray-900">Confirm Deletion</h2>
+              </div>
+            </div>
             
-            <div className="flex space-x-3">
-              <button
-                onClick={handleDeleteConfirm}
-                className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => {
-                  setIsDeleteModalOpen(false);
-                  setSelectedItem(null);
-                }}
-                className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-400 transition-colors"
-              >
-                Cancel
-              </button>
+            <div className="p-6">
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                Are you sure you want to delete <span className="font-semibold text-[#0B5351]">{selectedItem?.name}</span>? This action cannot be undone and will permanently remove this item from your inventory.
+              </p>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={handleDeleteConfirm}
+                  className="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-3 rounded-lg font-medium hover:from-red-700 hover:to-red-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative z-10">Delete Item</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setIsDeleteModalOpen(false);
+                    setSelectedItem(null);
+                  }}
+                  className="flex-1 bg-gradient-to-r from-gray-400 to-gray-500 text-white px-4 py-3 rounded-lg font-medium hover:from-gray-500 hover:to-gray-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:shadow-md active:translate-y-0.5 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative z-10">Cancel</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
