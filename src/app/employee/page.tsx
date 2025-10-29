@@ -117,7 +117,8 @@ export default function EmployeePage() {
               ))}
             </tbody>
           </table>
-        </div>
+            </div>
+          </div>
 
         {/* Add Employee Modal */}
         {showForm && (
@@ -165,6 +166,7 @@ export default function EmployeePage() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
