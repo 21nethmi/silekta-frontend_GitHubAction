@@ -98,7 +98,7 @@ const ReportView = ({ config, onBack }: ReportViewProps) => {
     documentTitle: `${config.reportType}_report_${
       new Date().toISOString().split("T")[0]
     }`,
-  });
+  } as any);
 
   const columns = columnConfig[config.reportType];
 

@@ -14,7 +14,6 @@ import {
   Package,
   Factory,
   UserCheck,
-  Wallet,
   Receipt,
   BarChart3,
   LogOut,
@@ -29,9 +28,9 @@ const Navbar = () => {
   // Track navbar collapse state
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Define navigation structure with icons
+  // Define navigation structure with icons (using routes from development branch)
   const navItems = [
-    { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Customer Management', href: '/customers', icon: Users },
     { name: 'Order Management', href: '/orders', icon: ShoppingCart },
     { name: 'Supplier & Purchase', href: '/suppliers', icon: Truck },
@@ -135,27 +134,27 @@ const Navbar = () => {
                       <div className={`overflow-hidden transition-all duration-300 ${
                         openDropdown === item.name ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
                       }`}>
-                      <ul className="ml-6 mt-3 space-y-2 pl-4 border-l border-white/10">
-                        {item.children.map((child) => (
-                          <li key={child.name}>
-                            <Link
-                              href={child.href}
-                              className={`block px-4 py-3 rounded-lg text-sm transition-all duration-300 group hover:translate-x-1 ${
-                                pathname === child.href
-                                  ? 'bg-white/20 text-white shadow-md border border-white/10'
-                                  : 'text-white/70 hover:bg-white/10 hover:text-white'
-                              }`}
-                            >
-                              <span className="flex items-center space-x-2">
-                                <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                                  pathname === child.href ? 'bg-white' : 'bg-white/30'
-                                }`}></div>
-                                <span>{child.name}</span>
-                              </span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                        <ul className="ml-6 mt-3 space-y-2 pl-4 border-l border-white/10">
+                          {item.children.map((child) => (
+                            <li key={child.name}>
+                              <Link
+                                href={child.href}
+                                className={`block px-4 py-3 rounded-lg text-sm transition-all duration-300 group hover:translate-x-1 ${
+                                  pathname === child.href
+                                    ? 'bg-white/20 text-white shadow-md border border-white/10'
+                                    : 'text-white/70 hover:bg-white/10 hover:text-white'
+                                }`}
+                              >
+                                <span className="flex items-center space-x-2">
+                                  <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                                    pathname === child.href ? 'bg-white' : 'bg-white/30'
+                                  }`}></div>
+                                  <span>{child.name}</span>
+                                </span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     )}
                   </>
@@ -179,7 +178,7 @@ const Navbar = () => {
                       {!isCollapsed && <span className="text-base font-medium">{item.name}</span>}
                     </div>
                     {/* Active indicator */}
-                    {pathname === item.href && (
+                    {pathname === item.href && !isCollapsed && (
                       <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
                         <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
                       </div>
@@ -189,7 +188,7 @@ const Navbar = () => {
                   </Link>
                 )}
               </li>
-            )
+            );
           })}
         </ul>
       </nav>
