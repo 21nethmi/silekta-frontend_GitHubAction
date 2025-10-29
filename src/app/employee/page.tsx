@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import { getCurrentUser, isAdmin } from '@/lib/mockAuth';
 import { Plus } from 'lucide-react';
 
 interface Employee {
@@ -21,6 +22,21 @@ export default function EmployeePage() {
   const [newEmployee, setNewEmployee] = useState('');
   const [status, setStatus] = useState<'Active' | 'Inactive'>('Active');
   const [showForm, setShowForm] = useState(false);
+
+  // Protect route - only admins can access
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (!user) {
+      router.push('/login');
+    } else if (!isAdmin()) {
+      router.push('/home');
+    }
+  }, [router]);
+
+  // Don't render if not admin
+  if (!isAdmin()) {
+    return null;
+  }
 
   const addEmployee = () => {
     if (!newEmployee.trim()) return;
@@ -139,7 +155,7 @@ export default function EmployeePage() {
 
               <div className="mb-4">
                 <label className="block text-sm text-gray-600 mb-1">Status</label>
-                <select
+                <select 
                   value={status}
                   onChange={(e) => setStatus(e.target.value as 'Active' | 'Inactive')}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0B5351]"
@@ -168,6 +184,8 @@ export default function EmployeePage() {
         )}
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 }

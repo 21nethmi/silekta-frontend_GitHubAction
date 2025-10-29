@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { useOrders } from "@/context/OrdersContext";
 import { useCustomers } from "@/context/customer-context";
+import { getCurrentUser, isAdmin } from "@/lib/mockAuth";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/Card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart as RePieChart, Pie, Cell, Legend } from "recharts";
@@ -30,8 +32,24 @@ const employees = [
 ];
 
 export default function DashboardPage() {
+	const router = useRouter();
 	const { orders } = useOrders();
 	const { customers } = useCustomers();
+
+	// Protect route - only admins can access
+	useEffect(() => {
+		const user = getCurrentUser();
+		if (!user) {
+			router.push('/login');
+		} else if (!isAdmin()) {
+			router.push('/home');
+		}
+	}, [router]);
+
+	// Don't render if not admin
+	if (!isAdmin()) {
+		return null;
+	}
 
 	// summary numbers
 	const totalCustomers = customers.length;

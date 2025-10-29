@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { 
   ChevronDown, 
   ChevronRight, 
@@ -17,19 +17,40 @@ import {
   Receipt,
   BarChart3,
   LogOut,
-  Sparkles
+  Sparkles,
+  Home
 } from 'lucide-react';
+import { getCurrentUser } from '@/lib/mockAuth';
+
+// Define NavItem type
+type NavItem = {
+  name: string;
+  href?: string;
+  icon?: any;
+  children?: { name: string; href: string }[];
+};
 
 const Navbar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const [currentUserRole, setCurrentUserRole] = useState<'admin' | 'employee' | null>(null);
 
   // Track which dropdown is open
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   // Track navbar collapse state
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Define navigation structure with icons (using routes from development branch)
-  const navItems = [
+  // Check user role on mount
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (user) {
+      setCurrentUserRole(user.role);
+    }
+  }, []);
+
+  // Define navigation structure for ADMIN (all routes)
+  const adminNavItems: NavItem[] = [
+    {name: 'Home', href: '/home', icon: Home },
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Customer Management', href: '/customers', icon: Users },
     { name: 'Order Management', href: '/orders', icon: ShoppingCart },
@@ -48,9 +69,32 @@ const Navbar = () => {
     { name: 'Report & Analytics', href: '/reports', icon: BarChart3 },
   ];
 
+  // Define navigation structure for EMPLOYEE (no Dashboard, Employee Management, Payroll, or Reports)
+  const employeeNavItems: NavItem[] = [
+    { name: "Home", href: "/home", icon: Home },
+    { name: "Customer Management", href: "/customers", icon: Users },
+    { name: "Order Management", href: "/orders", icon: ShoppingCart },
+    { name: "Supplier & Purchase", href: "/suppliers", icon: Truck },
+    { name: "Inventory Management", href: "/inventory", icon: Package },
+    { name: "Production Management", href: "/production", icon: Factory },
+    { name: "Billing & Invoice", href: "/billing", icon: Receipt },
+  ];
+
+  // Select navigation items based on role
+  const navItems = currentUserRole === 'admin' ? adminNavItems : employeeNavItems;
+
   // Toggle dropdown open/close
   const toggleDropdown = (name: string) => {
     setOpenDropdown((prev) => (prev === name ? null : name));
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('currentUser');
+      sessionStorage.removeItem('currentUser');
+    }
+    router.push('/login');
   };
 
   return (
@@ -94,7 +138,7 @@ const Navbar = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-4 py-8 relative">
+      <nav className="flex-1 px-4 py-8 relative overflow-y-auto">
         <ul className="space-y-3">
           {navItems.map((item) => {
             const IconComponent = item.icon;
@@ -196,6 +240,7 @@ const Navbar = () => {
       {/* Logout Button */}
       <div className="p-6 border-t border-white/10 relative">
         <button 
+          onClick={handleLogout}
           className="w-full bg-gradient-to-r from-[#DE8080] to-[#E09090] text-white px-5 py-4 rounded-xl font-medium hover:from-[#E09090] hover:to-[#DE8080] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:shadow-md active:translate-y-0.5 flex items-center justify-center space-x-3 group relative overflow-hidden"
           title={isCollapsed ? 'Logout' : ''}
         >
@@ -204,6 +249,7 @@ const Navbar = () => {
           {!isCollapsed && <span className="relative z-10">Logout</span>}
         </button>
       </div>
+      
     </div>
   );
 };
