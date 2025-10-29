@@ -2,22 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import Image from 'next/image';
+import Navbar from '@/components/Navbar';
 import { getCurrentUser, User } from '@/lib/mockAuth';
 
 const HomePage = () => {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  // Handle logout
-  const handleLogout = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('currentUser');
-      sessionStorage.removeItem('currentUser');
-    }
-    router.push('/login');
-  };
+
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -33,129 +26,11 @@ const HomePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Header Bar */}
-      <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-20">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-              <Link href="/home">
-                <div className="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition-opacity">
-                  <div className="w-12 h-12 relative">
-                    <Image
-                      src="/Logo (2).png"
-                      alt="Silekta Logo"
-                      width={48}
-                      height={48}
-                      className="object-contain"
-                      priority
-                    />
-                  </div>
-                  <div>
-                    <h1 className="text-xl font-bold text-[#0B5351]">Silekta Holdings</h1>
-                    <p className="text-xs text-gray-500">Paper Products & Printing Services</p>
-                  </div>
-                </div>
-              </Link>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm font-semibold text-gray-800">{currentUser.fullName}</p>
-                <p className="text-xs text-gray-500">{currentUser.position}</p>
-                <span className={`text-xs px-2 py-0.5 rounded ${
-                  currentUser.role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                }`}>
-                  {currentUser.role.toUpperCase()}
-                </span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="bg-[#DE8080] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#DE8080]/90 transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Access Touchdown Bar */}
-        <div className="bg-gray-50 border-t border-gray-200">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex items-center justify-center gap-1 py-2 overflow-x-auto">
-               <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white transition-all text-sm whitespace-nowrap">
-                <svg className="w-4 h-4 text-[#0B5351]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                <span className="text-gray-700 font-medium">Dashboard</span>
-              </Link>
-              <Link href="/customers" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white transition-all text-sm whitespace-nowrap">
-                <svg className="w-4 h-4 text-[#0B5351]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <span className="text-gray-700 font-medium">Customers</span>
-              </Link>
-
-              <Link href="/orders" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white transition-all text-sm whitespace-nowrap">
-                <svg className="w-4 h-4 text-[#8CBCB9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-                <span className="text-gray-700 font-medium">Orders</span>
-              </Link>
-
-              <Link href="/inventory" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white transition-all text-sm whitespace-nowrap">
-                <svg className="w-4 h-4 text-[#0B5351]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
-                <span className="text-gray-700 font-medium">Inventory</span>
-              </Link>
-
-              <Link href="/production" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white transition-all text-sm whitespace-nowrap">
-                <svg className="w-4 h-4 text-[#8CBCB9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span className="text-gray-700 font-medium">Production</span>
-              </Link>
-
-              <Link href="/suppliers" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white transition-all text-sm whitespace-nowrap">
-                <svg className="w-4 h-4 text-[#0B5351]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                </svg>
-                <span className="text-gray-700 font-medium">Suppliers</span>
-              </Link>
-
-              {/* Admin-only quick access items */}
-              {currentUser.role === 'admin' && (
-                <>
-                  <Link href="/employee" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white transition-all text-sm whitespace-nowrap">
-                    <svg className="w-4 h-4 text-[#8CBCB9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <span className="text-gray-700 font-medium">Employees</span>
-                  </Link>
-
-                  <Link href="/payroll" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white transition-all text-sm whitespace-nowrap">
-                    <svg className="w-4 h-4 text-[#0B5351]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span className="text-gray-700 font-medium">Payroll</span>
-                  </Link>
-
-                  <Link href="/reports" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white transition-all text-sm whitespace-nowrap">
-                    <svg className="w-4 h-4 text-[#8CBCB9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                    <span className="text-gray-700 font-medium">Reports</span>
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero Section */}
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
+      <Navbar />
+      
+      <div className="flex-1 overflow-y-auto">
+        {/* Hero Section */}
       <div className="bg-gradient-to-r from-[#0B5351] to-[#8CBCB9] text-white py-16">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">
@@ -293,7 +168,7 @@ const HomePage = () => {
                   alt={`Product ${num}`}
                   fill
                   className="object-cover hover:scale-110 transition-transform duration-300"
-                  onError={(e) => {
+                  onError={(e: any) => {
                     e.currentTarget.style.display = 'none';
                   }}
                 />
@@ -316,7 +191,7 @@ const HomePage = () => {
                   alt={`Production Process ${num}`}
                   fill
                   className="object-cover hover:scale-110 transition-transform duration-300"
-                  onError={(e) => {
+                  onError={(e: any) => {
                     e.currentTarget.style.display = 'none';
                   }}
                 />
@@ -428,6 +303,7 @@ const HomePage = () => {
           </div>
         </section>
 
+        </div>
       </div>
     </div>
   );

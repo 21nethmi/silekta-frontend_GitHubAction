@@ -185,7 +185,5 @@ export default function EmployeePage() {
         </div>
       </div>
     </div>
-    </div>
-    </div>
   );
 }

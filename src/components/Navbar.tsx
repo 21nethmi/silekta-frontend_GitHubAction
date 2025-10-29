@@ -118,10 +118,6 @@ const Navbar = () => {
             {!isCollapsed && (
               <div className="flex flex-col">
                 <span className="text-white text-xl font-bold tracking-wide drop-shadow-md">Silekta</span>
-                <div className="flex items-center space-x-1 text-xs text-white/70">
-                  <Sparkles size={12} className="animate-pulse" />
-                  <span>Management System</span>
-                </div>
               </div>
             )}
           </div>
@@ -138,7 +134,7 @@ const Navbar = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-4 py-8 relative overflow-y-auto">
+      <nav className="flex-1 px-4 py-8 relative overflow-y-auto nav-scrollbar">
         <ul className="space-y-3">
           {navItems.map((item) => {
             const IconComponent = item.icon;
@@ -204,7 +200,7 @@ const Navbar = () => {
                   </>
                 ) : (
                   <Link
-                    href={item.href}
+                    href={item.href || '#'}
                     className={`flex items-center ${isCollapsed ? 'justify-center' : ''} px-5 py-4 rounded-xl transition-all duration-300 group hover:shadow-lg hover:scale-[1.02] relative overflow-hidden ${
                       pathname === item.href
                         ? 'bg-gradient-to-r from-[#8CBCB9]/40 to-[#0B5351]/25 text-white shadow-md border border-[#8CBCB9]/30'
